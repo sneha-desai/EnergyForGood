@@ -4,6 +4,7 @@ import numpy as np
 import math
 import copy
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, reward):
@@ -55,7 +56,6 @@ def smooth_list(x):
     smoothing_window = 50
     avg_x = []
     for i in range(len(x)):
-        print(x[max(0, i - smoothing_window):i])
         avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
     return avg_x
 
@@ -69,8 +69,12 @@ def plot_learning_curve(rList):
     plt.grid(True)
     plt.title("Q-Learning Curve")
 
-    plt.savefig('plots/{}.png'.format("Q-Learning Curve"))
+    time = get_timestamp()
+    plt.savefig('plots/{}.png'.format("Q-Learning Curve - " + time))
     plt.close()
+
+def get_timestamp():
+    return str(datetime.now())
 
 
 if __name__ == "__main__":
@@ -118,6 +122,7 @@ if __name__ == "__main__":
             print("Action: ", action)
 
             reward, next_state = env.step(action, i, weather)
+
 
             next_state_index = get_state_index(next_state, state_map)
 
