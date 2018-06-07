@@ -94,17 +94,19 @@ if __name__ == "__main__":
 
     gamma = 0.
     alpha = 0.8
-    epsilon = 0.1
-    episodes_num = 100
+    epsilon = 0.03
+    episodes_num = 1000
     rList = []
 
     state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
     action_map = init_action_map(num_solar_actions, num_fossil_states)
 
+    print_flag = False
+
     for itr in range(episodes_num):
 
-        print("******************")
-        print("Episode: ", itr)
+        if itr%50 == 0:
+            print_flag = True
 
         env = EngEnv()
         cur_state = env.state
@@ -119,8 +121,6 @@ if __name__ == "__main__":
             action_index = eps_greedy(Q, epsilon, cur_state_index)
             action = action_map[action_index]
 
-            print("Action: ", action)
-
             reward, next_state = env.step(action, i, weather)
 
 
@@ -131,30 +131,26 @@ if __name__ == "__main__":
             cur_state = next_state
             total_reward += reward
 
-        # print("Total reward: ", total_reward)
+        if print_flag:
+            print("*************************")
+            print("Iteration : " + str(itr))
+            print("Renewable Energy:" + str(env.renew_energy))
+            print("Fossil Fuel Energy: " + str(env.ff_energy))
+            print("Renewable Energy Cost: " + str(env.renew_cost))
+            print("Fossil Fuel Cost: " + str(env.ff_cost))
+            print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
+            if (env.renew_energy + env.ff_energy) > 0:
+                print("Percentage of Renewable : " + str((float(env.renew_energy) / (env.renew_energy + env.ff_energy))*100))
+            else:
+                print("NO ENERGY PRODUCED")
+            if (env.time_energy_requirement[3] <= (env.renew_energy + env.ff_energy)):
+                print("Energy Requirement Met: YES")
+            else:
+                print(("Energy Requirement Met: NO"))
+            print("*************************")
+        print_flag = False
         rList.append(total_reward)
 
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
     plot_learning_curve(rList)
-
-
-
-
-
-
-
-    # for j in range(5):
-    #     print("###############################################")
-    #     total_reward = 0
-    #     reward = 0
-    #     env = EngEnv()
-    #     for i in range(24):
-    #         reward, state = env.step(np.random.randint(2, size=2), i, np.random.randint(2, size=1))
-    #         total_reward = total_reward + reward
-    #         print("Iteration: ", i, " Total Reward: ", total_reward)
-
-
-
-    # action_index = np.argmax(Q[cur_state_index, :])
-    # action = action_map[action_index]

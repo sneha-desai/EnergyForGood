@@ -25,10 +25,10 @@ class EngEnv:
 
     def __init__(self):
         self.time_energy_requirement = [
-            -7.594591898,
-            -8.240421074,
-            -6.522350828,
-            -7.6426362
+            7.594591898,
+            8.240421074,
+            6.522350828,
+            7.6426362
         ]
         self.renew_price = 0.10 # $/kWh
         self.ff_price = 0.05 # $/kWh
