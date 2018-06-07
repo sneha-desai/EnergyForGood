@@ -54,6 +54,17 @@ class EngEnv:
         
         return reward
 
+    def reward_min_cost(self, renew_price, ff_price):
+        print("renew_price", renew_price)
+        print("ff_price", ff_price)
+        cost = renew_price + ff_price
+        print("cost", cost)
+        if (cost <= 0.5):
+            reward = 1
+        else:
+            reward = -1
+        return reward
+
     def step(self, action, time, sun):
         if (action[0] == 1):
             if (time == 2):
@@ -61,12 +72,17 @@ class EngEnv:
             self.renew_cost += self.renew_price*self.renew_energy # doesn't charge $ when there is no sun out
             self.battery = self.renew_energy + self.time_energy_requirement[time]
 
+        print(self.renew_cost)
+
         # fossil fuel dial
         if (action[1] > 0):
-            self.ff_energy += 15*action[1] # need to tune because 15 is arbitrary
+            self.ff_energy += 10*action[1] # need to tune because 15 is arbitrary
             self.ff_cost += self.ff_price*self.ff_energy
 
-        reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
+        print(self.ff_cost)
+
+        # reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
+        reward = self.reward_min_cost(self.renew_cost, self.ff_cost)        
         self.state = action + [time] + [sun]
         # return reward, self.state, self.renew_energy, self.ff_energy
         return reward, self.state
