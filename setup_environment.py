@@ -42,28 +42,24 @@ class EngEnv:
         self.battery = 0
 
 
-    def reward_base(self, renew_energy, ff_energy, battery, time_energy_requirement, time):
-        # TODO: going from time 3 to 0 is not time+1 anymore
-        # reward(self)
-        if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time] + self.time_energy_requirement[time + 1]:
-            reward = 1
-        elif self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time]:
-            reward = 0 # possibly make into small positive reward 
+    def reward_base(self, renew_energy, ff_energy, battery, time_energy_requirement, time, renew_cost, ff_cost):
+        # if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time] + self.time_energy_requirement[time + 1]:
+        #     reward = 1
+        if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time]:
+            reward = 1 # possibly make into small positive reward 
         else:
             reward = -1
         
+        reward += 0.1*(self.reward_min_cost(renew_cost, ff_cost))
         return reward
 
-    def reward_min_cost(self, renew_price, ff_price):
-        # print("renew_price", renew_price)
-        # print("ff_price", ff_price)
+    def reward_min_cost(self, renew_cost, ff_cost):
         cost = 0
-        cost = renew_price + ff_price
-        print("cost", cost)
-        if (cost > 0 and cost <= 0.5):
-            reward = 1
+        cost = renew_cost + ff_cost
+        if (cost > 0 and cost <= 1.0):
+            reward = cost
         else:
-            reward = -1
+            reward = -cost
         return reward
 
     def step(self, action, time, sun):
@@ -72,7 +68,7 @@ class EngEnv:
         self.renew_cost = 0
         self.ff_cost = 0
         if (action[0] == 1):
-            self.renew_energy = 10*action[0] # need to tune because 15 is arbitrary
+            self.renew_energy = 10*action[0] 
             self.renew_cost = self.renew_price*self.renew_energy
             # if (time == 2):
             #     self.renew_energy = 10
@@ -91,6 +87,5 @@ class EngEnv:
         reward = self.reward_min_cost(self.renew_cost, self.ff_cost)        
         self.state = action + [time] + [sun]
         # return reward, self.state, self.renew_energy, self.ff_energy
-        # print("State: ", self.state)
         return reward, self.state
 
