@@ -6,6 +6,10 @@ import copy
 
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, reward):
+    print(reward)
+    print(cur_state)
+    print(next_state)
+    print(action)
     delta = reward + gamma * np.max(q_vals[next_state, :]) - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
 
@@ -44,11 +48,9 @@ def get_action_index(action, action_map):
 
 def eps_greedy(q_vals, eps, state):
     if random.random() <= eps:
-        print("if")
         action = random.randint(0,3)
         return action # sample an action randomly # sample an action randomly
     else:
-        print("else")
         action = np.argmax(q_vals[state,:])
     return action
 
@@ -57,30 +59,31 @@ if __name__ == "__main__":
     Q = np.zeros([32, 4])
     gamma = 0.95
     alpha = 0.8
-    epsilon = 0.1
-    episodes_num = 5
+    epsilon = 0.5
+    episodes_num = 5000
     rList = []
     state_map = init_state_map(2,2,4,2)
     action_map = init_action_map(2,2)
 
 
     for itr in range(episodes_num):
+        print("Episode: ", itr)
         env = EngEnv()
         cur_state = env.state
         total_reward = 0
         done = False
-        for i in range(24):
+        for i in range(4):
             cur_state_index = get_state_index(cur_state, state_map)
 
-            print(Q)
-
             action_index = eps_greedy(Q, epsilon, cur_state_index)
-            print(action_index)
             action = action_map[action_index]
+
+            print("Action: ", action)
 
             sun = get_sun()
 
-            reward, next_state = env.step(action, i/6, sun)
+            reward, next_state = env.step(action, i, sun)
+
             next_state_index = get_state_index(next_state, state_map)
 
             q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
