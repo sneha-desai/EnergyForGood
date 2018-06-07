@@ -3,6 +3,7 @@ import random
 import numpy as np
 import math
 import copy
+import matplotlib.pyplot as plt
 
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, reward):
@@ -50,25 +51,47 @@ def eps_greedy(q_vals, eps, state):
         action = np.argmax(q_vals[state,:])
     return action
 
+def smooth_list(x):
+    smoothing_window = 50
+    avg_x = []
+    for i in range(len(x)):
+        print(x[max(0, i - smoothing_window):i])
+        avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
+    return avg_x
+
+def plot_learning_curve(rList):
+    x = list(range(len(rList)))
+    y = rList
+
+    plt.plot(x, smooth_list(y))
+    plt.ylabel("Total Reward")
+    plt.xlabel("Episodes")
+    plt.grid(True)
+    plt.title("Q-Learning Curve")
+
+    plt.savefig('plots/{}.png'.format("Q-Learning Curve"))
+    plt.close()
+
 
 if __name__ == "__main__":
     Q = np.zeros([32, 4])
-    gamma = 0.95
+    gamma = 0.
     alpha = 0.8
-    epsilon = 0.5
-    episodes_num = 5000
+    epsilon = 0.1
+    episodes_num = 100
     rList = []
     state_map = init_state_map(2,2,4,2)
     action_map = init_action_map(2,2)
 
-
     for itr in range(episodes_num):
+
+        print("******************")
         print("Episode: ", itr)
         env = EngEnv()
         cur_state = env.state
         total_reward = 0
         done = False
-        for i in range(4):
+        for i in range(24):
             cur_state_index = get_state_index(cur_state, state_map)
 
             action_index = eps_greedy(Q, epsilon, cur_state_index)
@@ -78,7 +101,7 @@ if __name__ == "__main__":
 
             sun = get_sun()
 
-            reward, next_state = env.step(action, i, sun)
+            reward, next_state = env.step(action, int(i/6), sun)
 
 
             next_state_index = get_state_index(next_state, state_map)
@@ -87,10 +110,12 @@ if __name__ == "__main__":
 
             cur_state = next_state
             total_reward += reward
+        # print("Total reward: ", total_reward)
         rList.append(total_reward)
 
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
+    plot_learning_curve(rList)
 
 
 
