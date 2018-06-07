@@ -55,12 +55,6 @@ class EngEnv:
         return reward
 
     def step(self, action, time, sun):
-        # get weather
-        # renew_cost = 0
-        # renew_energy = 0
-        # ff_cost = 0
-        # ff_energy = 0
-        # solar panel switch
         if (action[0] == 1):
             if (time == 2):
                 self.renew_energy = 10
@@ -74,39 +68,6 @@ class EngEnv:
 
         reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
         self.state = action + [time] + [sun]
-        return reward, self.state, self.renew_energy, self.ff_energy
-
-        # return self.renew_cost, self.renew_energy, \
-        #        self.ff_cost, self.ff_energy
-
-
-
-
-
-
-
-
-
-    # def reward(self):
-    #     if self.ff_energy + self.renew_energy >= 30:
-    #         reward = 30
-    #     else:
-    #         reward = 0
-    #     return reward
-
-#     def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, reward):
-#         delta = reward + gamma * np.max(q_vals[next_state, :]) - q_vals[cur_state, action]
-#         q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
-#
-#
-# if __name__ == "__main__":
-#     for j in range(5):
-#         print("###############################################")
-#         total_reward = 0
-#         reward = 0
-#         env = EngEnv()
-#         for i in range(24):
-#             reward, state = env.step(np.random.randint(2, size=2), i, np.random.randint(2, size=1))
-#             total_reward = total_reward + reward
-#             print("Iteration: ", i, " Total Reward: ", total_reward)
+        # return reward, self.state, self.renew_energy, self.ff_energy
+        return reward, self.state
 
