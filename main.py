@@ -4,14 +4,15 @@ import numpy as np
 import math
 import copy
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, reward):
     delta = reward + gamma * np.max(q_vals[next_state, :]) - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
 
-def get_sun():
-    return np.random.randint(2, size=1)
+def get_weather():
+    return np.random.randint(3, size=1)
 
 def init_action_map(a, b):
     count = 0
@@ -55,7 +56,6 @@ def smooth_list(x):
     smoothing_window = 50
     avg_x = []
     for i in range(len(x)):
-        print(x[max(0, i - smoothing_window):i])
         avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
     return avg_x
 
@@ -69,29 +69,51 @@ def plot_learning_curve(rList):
     plt.grid(True)
     plt.title("Q-Learning Curve")
 
-    plt.savefig('plots/{}.png'.format("Q-Learning Curve"))
+    time = get_timestamp()
+    plt.savefig('plots/{}.png'.format("Q-Learning Curve - " + time))
     plt.close()
+
+def get_timestamp():
+    return str(datetime.now())
 
 
 if __name__ == "__main__":
-    Q = np.zeros([32, 4])
+
+    num_solar_states = 2
+    num_fossil_states = 2
+    num_time_states = 4
+    num_weather_states = 3
+
+    num_solar_actions = 2
+    num_fossil_actions = 2
+
+    Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
+    Q_y = num_solar_actions * num_solar_actions
+
+    Q = np.zeros([Q_x, Q_y])
+
     gamma = 0.
     alpha = 0.8
     epsilon = 0.1
     episodes_num = 100
     rList = []
-    state_map = init_state_map(2,2,4,2)
-    action_map = init_action_map(2,2)
+
+    state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
+    action_map = init_action_map(num_solar_actions, num_fossil_states)
 
     for itr in range(episodes_num):
 
         print("******************")
         print("Episode: ", itr)
+
         env = EngEnv()
         cur_state = env.state
         total_reward = 0
-        done = False
-        for i in range(24):
+
+        #Static weather in each episode
+        weather = get_weather()
+
+        for i in range(4):
             cur_state_index = get_state_index(cur_state, state_map)
 
             action_index = eps_greedy(Q, epsilon, cur_state_index)
@@ -99,9 +121,7 @@ if __name__ == "__main__":
 
             print("Action: ", action)
 
-            sun = get_sun()
-
-            reward, next_state = env.step(action, int(i/6), sun)
+            reward, next_state = env.step(action, i, weather)
 
 
             next_state_index = get_state_index(next_state, state_map)
@@ -110,6 +130,7 @@ if __name__ == "__main__":
 
             cur_state = next_state
             total_reward += reward
+
         # print("Total reward: ", total_reward)
         rList.append(total_reward)
 
