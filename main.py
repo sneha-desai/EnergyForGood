@@ -6,10 +6,6 @@ import copy
 
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, reward):
-    print(reward)
-    print(cur_state)
-    print(next_state)
-    print(action)
     delta = reward + gamma * np.max(q_vals[next_state, :]) - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
 
@@ -83,6 +79,7 @@ if __name__ == "__main__":
             sun = get_sun()
 
             reward, next_state = env.step(action, i, sun)
+
 
             next_state_index = get_state_index(next_state, state_map)
 
