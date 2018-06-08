@@ -24,7 +24,7 @@ if __name__ == "__main__":
     gamma = 0.
     alpha = 0.8
     epsilon = 0.1
-    episodes_num = 1000
+    episodes_num = 100
     rList = []
     reList = []
     ffList = []
@@ -37,25 +37,28 @@ if __name__ == "__main__":
 
     for itr in range(episodes_num):
 
+        # Printing results every 50 episodes
         if itr%50 == 0:
             print_flag = True
 
+        # Reset the state at the beginning of each "week" in this case 
         env = EngEnv()
+
+        # Set reward = 0 at the beginning of each episode 
         total_reward = 0
+
 
         for day in range(num_of_days):
 
             cur_state = env.state
+            print(cur_state)
             weather = get_weather()     # Static weather in each day
 
             for i in range(num_time_states):
                 cur_state_index = get_state_index(cur_state, state_map)
-
-
                 cur_state[2] = i
                 cur_state[3] = weather
 
-                #
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
                 action = action_map[action_index]
 
