@@ -1,9 +1,9 @@
 import numpy as np
 import sys
 from setup_environment import EngEnv
-from utils import q_learning_update, init_action_map, init_state_map, \
-    get_state_index, get_action_index, eps_greedy, smooth_list, plot_learning_curve, \
-    get_timestamp, print_info, multiBarPlot
+from utils import q_learning_update, eps_greedy, print_info
+from plots import smooth_list, plot_learning_curve, get_timestamp, multiBarPlot
+from maps import init_action_map, init_state_map, get_state_index, get_action_index
 from weather import get_sunlight
 
 if __name__ == "__main__":
