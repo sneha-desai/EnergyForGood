@@ -1,18 +1,6 @@
 import numpy as np
 import math
 import copy
-# flag
-##  0: OFF
-##  1: ON
-
-# """ 
-# action = [
-#     [on, off], # solar
-#     [on, off], # oil
-#     [on, off], # another
-#     [on, off]  # another 
-# ]
-# """    
 
 energy_requirement = {
     "morn" :  7.594591898,
@@ -56,7 +44,7 @@ class EngEnv:
     def reward_min_cost(self, renew_cost, ff_cost):
         cost = 0
         cost = renew_cost + ff_cost
-        if (cost > 0 and cost <= 1.0):
+        if (cost > 0 and cost <= 0.5):
             reward = cost
         else:
             reward = -cost
