@@ -34,3 +34,6 @@ def print_info(print_flag, itr, env):
     else:
         print(("Energy Requirement Met: NO"))
     print("*************************")
+
+def get_timestamp():
+    return str(datetime.now())

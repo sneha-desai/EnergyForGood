@@ -3,6 +3,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
+from utils import get_timestamp
 
 def multiBarPlot(x, y, colors, ylabel, title, legends):
     N = len(x)
@@ -44,6 +45,3 @@ def smooth_list(x):
         avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
     return avg_x
 
-
-def get_timestamp():
-    return str(datetime.now())
