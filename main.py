@@ -12,7 +12,7 @@ def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, rewar
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
 
 def get_weather():
-    return np.random.randint(3, size=1)
+    return random.randint(0,2)
 
 def init_action_map(a, b):
     count = 0
@@ -76,6 +76,25 @@ def plot_learning_curve(rList):
 def get_timestamp():
     return str(datetime.now())
 
+def print_info(print_flag):
+    print("*************************")
+    print("Iteration : " + str(itr))
+    print("Renewable Energy:" + str(env.renew_energy))
+    print("Fossil Fuel Energy: " + str(env.ff_energy))
+    print("Renewable Energy Cost: " + str(env.renew_cost))
+    print("Fossil Fuel Cost: " + str(env.ff_cost))
+    print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
+    if (env.renew_energy + env.ff_energy) > 0:
+        print("Percentage of Renewable : " + str(
+            (float(env.renew_energy) / (env.renew_energy + env.ff_energy)) * 100))
+    else:
+        print("NO ENERGY PRODUCED")
+    if (env.time_energy_requirement[3] <= (env.renew_energy + env.ff_energy)):
+        print("Energy Requirement Met: YES")
+    else:
+        print(("Energy Requirement Met: NO"))
+    print("*************************")
+
 
 def multiBarPlot(x, y, colors, ylabel, title, legends):
     N = len(x)
@@ -99,6 +118,8 @@ def multiBarPlot(x, y, colors, ylabel, title, legends):
     plt.savefig('plots/{}.png'.format(title))
 
 if __name__ == "__main__":
+
+    num_of_days = 7         # number of days per episode
 
     num_solar_states = 2
     num_fossil_states = 2
@@ -133,51 +154,42 @@ if __name__ == "__main__":
             print_flag = True
 
         env = EngEnv()
-        cur_state = env.state
         total_reward = 0
 
-        #Static weather in each episode
-        weather = get_weather()
+        for day in range(num_of_days):
 
-        for i in range(4):
-            cur_state_index = get_state_index(cur_state, state_map)
+            cur_state = env.state
+            weather = get_weather()     # Static weather in each day
 
-            action_index = eps_greedy(Q, epsilon, cur_state_index)
-            action = action_map[action_index]
-
-            reward, next_state = env.step(action, i, weather)
+            for i in range(num_time_states):
+                cur_state_index = get_state_index(cur_state, state_map)
 
 
-            next_state_index = get_state_index(next_state, state_map)
+                cur_state[2] = i
+                cur_state[3] = weather
 
-            q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
+                #
+                action_index = eps_greedy(Q, epsilon, cur_state_index)
+                action = action_map[action_index]
 
-            cur_state = next_state
-            total_reward += reward
+                reward, next_state = env.step(action, cur_state)
+
+                next_state_index = get_state_index(next_state, state_map)
+
+                q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
+
+                cur_state = next_state
+                total_reward += reward
 
         if print_flag:
-            print("*************************")
-            print("Iteration : " + str(itr))
-            print("Renewable Energy:" + str(env.renew_energy))
-            print("Fossil Fuel Energy: " + str(env.ff_energy))
-            print("Renewable Energy Cost: " + str(env.renew_cost))
-            print("Fossil Fuel Cost: " + str(env.ff_cost))
-            print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
-            if (env.renew_energy + env.ff_energy) > 0:
-                print("Percentage of Renewable : " + str((float(env.renew_energy) / (env.renew_energy + env.ff_energy))*100))
-            else:
-                print("NO ENERGY PRODUCED")
-            if (env.time_energy_requirement[3] <= (env.renew_energy + env.ff_energy)):
-                print("Energy Requirement Met: YES")
-            else:
-                print(("Energy Requirement Met: NO"))
-            print("*************************")
-
+            print_info(print_flag)
             reList.append(env.renew_energy)
             ffList.append(env.ff_energy)
 
-        rList.append(total_reward)
         print_flag = False
+
+        #total reward per episode appended for learning curve visualization
+        rList.append(total_reward)
 
 
     print("Score over time: " + str(sum(rList) / episodes_num))
