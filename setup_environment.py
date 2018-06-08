@@ -62,14 +62,11 @@ class EngEnv:
             #     self.renew_energy = 10
             # self.renew_cost += self.renew_price*self.renew_energy # doesn't charge $ when there is no sun out
             # self.battery = self.renew_energy + self.time_energy_requirement[time]
-        # print(self.renew_cost)
 
         # fossil fuel dial
         if (action[1] == 1):
             self.ff_energy = 10*action[1] # need to tune because 15 is arbitrary
             self.ff_cost = self.ff_price*self.ff_energy
-
-        # print(self.ff_cost)
 
         # reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
         reward = self.reward_min_cost(self.renew_cost, self.ff_cost)        
