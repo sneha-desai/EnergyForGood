@@ -150,9 +150,6 @@ if __name__ == "__main__":
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
                 action = action_map[action_index]
 
-
-                reward, next_state = env.step(action, i, weather)
-
                 next_state_index = get_state_index(next_state, state_map)
 
                 q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
