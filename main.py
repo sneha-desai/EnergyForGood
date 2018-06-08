@@ -76,8 +76,30 @@ def plot_learning_curve(rList):
 def get_timestamp():
     return str(datetime.now())
 
+def print_info(print_flag):
+    if print_flag:
+        print("*************************")
+        print("Iteration : " + str(itr))
+        print("Renewable Energy:" + str(env.renew_energy))
+        print("Fossil Fuel Energy: " + str(env.ff_energy))
+        print("Renewable Energy Cost: " + str(env.renew_cost))
+        print("Fossil Fuel Cost: " + str(env.ff_cost))
+        print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
+        if (env.renew_energy + env.ff_energy) > 0:
+            print("Percentage of Renewable : " + str(
+                (float(env.renew_energy) / (env.renew_energy + env.ff_energy)) * 100))
+        else:
+            print("NO ENERGY PRODUCED")
+        if (env.time_energy_requirement[3] <= (env.renew_energy + env.ff_energy)):
+            print("Energy Requirement Met: YES")
+        else:
+            print(("Energy Requirement Met: NO"))
+        print("*************************")
+
 
 if __name__ == "__main__":
+
+    num_of_days = 7         # number of days per episode
 
     num_solar_states = 2
     num_fossil_states = 2
@@ -109,49 +131,38 @@ if __name__ == "__main__":
             print_flag = True
 
         env = EngEnv()
-        cur_state = env.state
         total_reward = 0
 
-        #Static weather in each episode
-        weather = get_weather()
-                
-        for i in range(4):
-            cur_state_index = get_state_index(cur_state, state_map)
+        for day in range(num_of_days):
 
-            action_index = eps_greedy(Q, epsilon, cur_state_index)
-            action = action_map[action_index]
+            cur_state = env.state
+            weather = get_weather()     # Static weather in each day
 
-            cur_state[2] = i
-            cur_state[3] = weather
+            for i in range(num_time_states):
+                cur_state_index = get_state_index(cur_state, state_map)
+
+
+                cur_state[2] = i
+                cur_state[3] = weather
             
-            reward, next_state = env.step(action, cur_state)
+                reward, next_state = env.step(action, cur_state)
+
+                action_index = eps_greedy(Q, epsilon, cur_state_index)
+                action = action_map[action_index]
 
 
-            next_state_index = get_state_index(next_state, state_map)
+                reward, next_state = env.step(action, i, weather)
 
-            q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
+                next_state_index = get_state_index(next_state, state_map)
 
-            cur_state = next_state
-            total_reward += reward
+                q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
 
-        if print_flag:
-            print("*************************")
-            print("Iteration : " + str(itr))
-            print("Renewable Energy:" + str(env.renew_energy))
-            print("Fossil Fuel Energy: " + str(env.ff_energy))
-            print("Renewable Energy Cost: " + str(env.renew_cost))
-            print("Fossil Fuel Cost: " + str(env.ff_cost))
-            print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
-            if (env.renew_energy + env.ff_energy) > 0:
-                print("Percentage of Renewable : " + str((float(env.renew_energy) / (env.renew_energy + env.ff_energy))*100))
-            else:
-                print("NO ENERGY PRODUCED")
-            if (env.time_energy_requirement[3] <= (env.renew_energy + env.ff_energy)):
-                print("Energy Requirement Met: YES")
-            else:
-                print(("Energy Requirement Met: NO"))
-            print("*************************")
+                cur_state = next_state
+                total_reward += reward
+
+        print_info(print_flag)
         print_flag = False
+
         rList.append(total_reward)
 
     print("Score over time: " + str(sum(rList) / episodes_num))
