@@ -77,6 +77,27 @@ def get_timestamp():
     return str(datetime.now())
 
 
+def multiBarPlot(x, y, colors, ylabel, title, legends):
+    N = len(x)
+    ind = np.arange(N)
+    width = 1.0 / (len(y) + 1)
+    fig, ax = plt.subplots()
+
+    rects = []
+    for i in range(len(y)):
+        rects.append(ax.bar(ind + width * i, y[i], width, color=colors[i]))
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
+    # ax.set_xticks(ind + width / 2)
+    # ax.set_xticks(ind + (len(x) / 2) * width)
+    ax.set_xticks(ind + width)
+    ax.set_xticklabels(x)
+    ax.legend((rects[0][0], rects[1][0]), legends)
+
+    # plt.tight_layout()
+
+    plt.savefig('plots/{}.png'.format(title))
+
 if __name__ == "__main__":
 
     num_solar_states = 2
@@ -94,9 +115,12 @@ if __name__ == "__main__":
 
     gamma = 0.
     alpha = 0.8
-    epsilon = 0.03
+    epsilon = 0.1
     episodes_num = 1000
     rList = []
+    reList = []
+    ffList = []
+    energyList = []
 
     state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
     action_map = init_action_map(num_solar_actions, num_fossil_states)
@@ -148,9 +172,21 @@ if __name__ == "__main__":
             else:
                 print(("Energy Requirement Met: NO"))
             print("*************************")
-        print_flag = False
+
+            reList.append(env.renew_energy)
+            ffList.append(env.ff_energy)
+
         rList.append(total_reward)
+        print_flag = False
+
 
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
+
     plot_learning_curve(rList)
+
+    energyList.append(reList)
+    energyList.append(ffList)
+    print(reList)
+    print(ffList)
+    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)", title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
