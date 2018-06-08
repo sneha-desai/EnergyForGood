@@ -1,10 +1,15 @@
-from setup_environment import EngEnv
 import numpy as np
+import sys
+from setup_environment import EngEnv
 from utils import q_learning_update, get_weather, init_action_map, init_state_map, \
     get_state_index, get_action_index, eps_greedy, smooth_list, plot_learning_curve, \
     get_timestamp, print_info, multiBarPlot
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        episodes_num = int(sys.argv[1])
+    else:
+        episodes_num = 1000
 
     num_of_days = 7         # number of days per episode
 
@@ -24,7 +29,6 @@ if __name__ == "__main__":
     gamma = 0.
     alpha = 0.8
     epsilon = 0.1
-    episodes_num = 1000
     rList = []
     reList = []
     ffList = []
@@ -86,6 +90,5 @@ if __name__ == "__main__":
 
     energyList.append(reList)
     energyList.append(ffList)
-    print(reList)
-    print(ffList)
-    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)", title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
+    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
