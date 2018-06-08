@@ -29,6 +29,11 @@ class EngEnv:
         self.state = [0,0,0,0] # order = solar, fossil fuel, time, sun
         self.battery = 0
 
+    def reset(self):
+        self.renew_energy = 0
+        self.ff_energy = 0
+        self.renew_cost = 0
+        self.ff_cost = 0
 
     def reward_base(self, renew_energy, ff_energy, battery, time_energy_requirement, time, renew_cost, ff_cost):
         # if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time] + self.time_energy_requirement[time + 1]:
@@ -51,12 +56,11 @@ class EngEnv:
         return reward
 
     def step(self, action, state):
+        self.reset()
+
         # state = [solar_switch, ff_switch, time, sun_coverage]
         sun_coverage = (state[3])/2 # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
-        self.renew_energy = 0
-        self.ff_energy = 0
-        self.renew_cost = 0
-        self.ff_cost = 0
+
         if (action[0] == 1):
             self.renew_energy = 10*sun_coverage # 10kWh based on research
             print(self.renew_energy)
