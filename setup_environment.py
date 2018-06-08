@@ -38,7 +38,7 @@ class EngEnv:
         self.renew_energy = 0 # how much energy has been produced from renewable
         self.ff_cost = 0
         self.ff_energy = 0 # how much energy has been produced from fossil fuel 
-        self.state = [0,0,0,0]
+        self.state = [0,0,0,0] # order = solar, fossil fuel, time, sun
         self.battery = 0
 
 
@@ -62,7 +62,7 @@ class EngEnv:
             reward = -cost
         return reward
 
-    def step(self, action, time, sun):
+    def step(self, action, state):
         self.renew_energy = 0
         self.ff_energy = 0
         self.renew_cost = 0
@@ -85,7 +85,9 @@ class EngEnv:
 
         # reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
         reward = self.reward_min_cost(self.renew_cost, self.ff_cost)        
-        self.state = action + [time] + [sun]
+        self.state[0] = action[0]
+        self.state[1] = action[1]
+
         # return reward, self.state, self.renew_energy, self.ff_energy
         return reward, self.state
 
