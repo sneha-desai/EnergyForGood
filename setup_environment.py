@@ -51,12 +51,15 @@ class EngEnv:
         return reward
 
     def step(self, action, state):
+        # state = [solar_switch, ff_switch, time, sun_coverage]
+        sun_coverage = (state[3])/2 # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
         self.renew_energy = 0
         self.ff_energy = 0
         self.renew_cost = 0
         self.ff_cost = 0
         if (action[0] == 1):
-            self.renew_energy = 10*action[0] 
+            self.renew_energy = 10*sun_coverage # 10kWh based on research
+            print(self.renew_energy)
             self.renew_cost = self.renew_price*self.renew_energy
             # if (time == 2):
             #     self.renew_energy = 10

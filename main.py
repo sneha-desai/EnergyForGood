@@ -25,7 +25,7 @@ if __name__ == "__main__":
     gamma = 0.
     alpha = 0.8
     epsilon = 0.1
-    episodes_num = 100
+    episodes_num = 1000
     rList = []
     reList = []
     ffList = []
