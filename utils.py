@@ -8,9 +8,6 @@ def q_learning_update(gamma, alpha, q_vals, cur_state, action, next_state, rewar
     delta = reward + gamma * np.max(q_vals[next_state, :]) - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
 
-def get_weather():
-    return random.randint(0,2)
-
 def init_action_map(a, b):
     count = 0
     mapping = {}
