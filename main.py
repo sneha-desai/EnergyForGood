@@ -1,10 +1,16 @@
-from setup_environment import EngEnv
 import numpy as np
-from utils import q_learning_update, get_weather, init_action_map, init_state_map, \
-    get_state_index, get_action_index, eps_greedy, smooth_list, plot_learning_curve, \
-    get_timestamp, print_info, multiBarPlot
+import sys
+from setup_environment import EngEnv
+from utils import q_learning_update, eps_greedy, print_info
+from plots import smooth_list, plot_learning_curve, get_timestamp, multiBarPlot
+from maps import init_action_map, init_state_map, get_state_index, get_action_index
+from weather import get_sunlight
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        episodes_num = int(sys.argv[1])
+    else:
+        episodes_num = 1000
 
     num_of_days = 7         # number of days per episode
 
@@ -24,7 +30,6 @@ if __name__ == "__main__":
     gamma = 0.
     alpha = 0.8
     epsilon = 0.1
-    episodes_num = 1000
     rList = []
     reList = []
     ffList = []
@@ -37,25 +42,28 @@ if __name__ == "__main__":
 
     for itr in range(episodes_num):
 
+        # Printing results every 50 episodes
         if itr%50 == 0:
             print_flag = True
 
+        # Reset the state at the beginning of each "week" in this case 
         env = EngEnv()
+
+        # Set reward = 0 at the beginning of each episode 
         total_reward = 0
+
 
         for day in range(num_of_days):
 
             cur_state = env.state
-            weather = get_weather()     # Static weather in each day
+            print(cur_state)
+            sunlight_coverage = get_sunlight() 
 
             for i in range(num_time_states):
                 cur_state_index = get_state_index(cur_state, state_map)
-
-
                 cur_state[2] = i
-                cur_state[3] = weather
+                cur_state[3] = sunlight_coverage
 
-                #
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
                 action = action_map[action_index]
 
@@ -86,6 +94,5 @@ if __name__ == "__main__":
 
     energyList.append(reList)
     energyList.append(ffList)
-    print(reList)
-    print(ffList)
-    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)", title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
+    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
