@@ -3,7 +3,7 @@ import numpy as np
 from utils import q_learning_update, init_action_map, init_state_map, \
     get_state_index, get_action_index, eps_greedy, smooth_list, plot_learning_curve, \
     get_timestamp, print_info, multiBarPlot
-from weather import get_weather
+from weather import get_sunlight
 
 if __name__ == "__main__":
 
@@ -53,12 +53,12 @@ if __name__ == "__main__":
 
             cur_state = env.state
             print(cur_state)
-            weather = get_weather()     # Static weather in each day
+            sunlight_coverage = get_sunlight() 
 
             for i in range(num_time_states):
                 cur_state_index = get_state_index(cur_state, state_map)
                 cur_state[2] = i
-                cur_state[3] = weather
+                cur_state[3] = sunlight_coverage
 
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
                 action = action_map[action_index]
