@@ -41,9 +41,6 @@ if __name__ == "__main__":
     state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
     action_map = init_action_map(num_solar_actions, num_fossil_states)
 
-    print(state_map)
-    print(action_map)
-
     print_flag = False
 
     for itr in range(episodes_num):
