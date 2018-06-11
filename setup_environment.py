@@ -2,13 +2,6 @@ import numpy as np
 import math
 import copy
 
-energy_requirement = {
-    "morn" :  7.594591898,
-    "aft" : 8.240421074,
-    "eve" : 6.522350828,
-    "night" : 7.6426362
-}
-
 class EngEnv:
 
     def __init__(self):

@@ -35,6 +35,9 @@ if __name__ == "__main__":
     ffList = []
     energyList = []
 
+    reSubList = []
+    ffSubList = []
+
     state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
     action_map = init_action_map(num_solar_actions, num_fossil_states)
 
@@ -76,10 +79,15 @@ if __name__ == "__main__":
                 cur_state = next_state
                 total_reward += reward
 
+        reSubList.append(env.renew_energy)
+        ffSubList.append(env.ff_energy)
+
         if print_flag:
-            print_info(print_flag, itr, env)
-            reList.append(env.renew_energy)
-            ffList.append(env.ff_energy)
+            print_info(itr, env)
+            reList.append(np.mean(reSubList))
+            ffList.append(np.mean(ffSubList))
+            reSubList = []
+            ffSubList = []
 
         print_flag = False
 
