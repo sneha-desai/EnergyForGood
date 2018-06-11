@@ -16,7 +16,7 @@ def eps_greedy(q_vals, eps, state):
         action = np.argmax(q_vals[state,:])
     return action
 
-def print_info(print_flag, itr, env):
+def print_info(itr, env):
     print("*************************")
     print("Iteration : " + str(itr))
     print("Renewable Energy:" + str(env.renew_energy))
