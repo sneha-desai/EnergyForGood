@@ -2,15 +2,7 @@ import numpy as np
 import math
 import copy
 
-energy_requirement = {
-    "morn" :  7.594591898,
-    "aft" : 8.240421074,
-    "eve" : 6.522350828,
-    "night" : 7.6426362
-}
-
 class EngEnv:
-
     def __init__(self):
         self.time_energy_requirement = [
             7.594591898,
@@ -36,10 +28,8 @@ class EngEnv:
         self.ff_cost = 0
 
     def reward_base(self, renew_energy, ff_energy, battery, time_energy_requirement, time, renew_cost, ff_cost):
-        # if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time] + self.time_energy_requirement[time + 1]:
-        #     reward = 1
         if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time]:
-            reward = 1 # possibly make into small positive reward 
+            reward = 1 
         else:
             reward = -1
         
@@ -58,7 +48,7 @@ class EngEnv:
     def step(self, action, state):
         self.reset()
 
-        # state = [solar_switch, ff_switch, time, sun_coverage]
+        # NOTE: state is in the form of [solar_switch, ff_switch, time, sun_coverage]
         sun_coverage = (state[3])/2 # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
 
         if (action[0] == 1):
@@ -70,7 +60,6 @@ class EngEnv:
             # self.renew_cost += self.renew_price*self.renew_energy # doesn't charge $ when there is no sun out
             # self.battery = self.renew_energy + self.time_energy_requirement[time]
 
-        # fossil fuel dial
         if (action[1] == 1):
             self.ff_energy = 10*action[1] # need to tune because 15 is arbitrary
             self.ff_cost = self.ff_price*self.ff_energy
@@ -80,6 +69,5 @@ class EngEnv:
         self.state[0] = action[0]
         self.state[1] = action[1]
 
-        # return reward, self.state, self.renew_energy, self.ff_energy
         return reward, self.state
 
