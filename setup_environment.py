@@ -3,8 +3,8 @@ import math
 import copy
 from weather import get_sunlight
 
+from EnergyProducer.energy_producer import EnergyProducer
 class EngEnv:
-
     def __init__(self):
         self.time_energy_requirement = [
             7.594591898,
@@ -12,8 +12,8 @@ class EngEnv:
             6.522350828,
             7.6426362
         ]
-        self.renew_price = 0.10 # $/kWh
-        self.ff_price = 0.05 # $/kWh
+        self.ff_producer = EnergyProducer('fossil fuel')
+        self.solar_producer = EnergyProducer('solar')
 
         self.reward = 0
         self.renew_cost = 0
@@ -30,10 +30,8 @@ class EngEnv:
         self.ff_cost = 0
 
     def reward_base(self, renew_energy, ff_energy, battery, time_energy_requirement, time, renew_cost, ff_cost):
-        # if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time] + self.time_energy_requirement[time + 1]:
-        #     reward = 1
         if self.renew_energy + self.ff_energy + battery >= self.time_energy_requirement[time]:
-            reward = 1 # possibly make into small positive reward 
+            reward = 1 
         else:
             reward = -1
         
@@ -51,22 +49,20 @@ class EngEnv:
 
     def step(self, action, state):
         self.reset()
+        time = state[2]
+        # NOTE: state is in the form of [solar_switch, ff_switch, time, sun_coverage]
 
-        # state = [solar_switch, ff_switch, time, sun_coverage]
         sun_coverage = (state[3])/2 # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
 
         if (action[0] == 1):
-            self.renew_energy = 10*sun_coverage # 10kWh based on research
-            self.renew_cost = self.renew_price*self.renew_energy
+            self.renew_cost = self.solar_producer.production_cost(self.time_energy_requirement[time], sun_coverage)
             # if (time == 2):
             #     self.renew_energy = 10
             # self.renew_cost += self.renew_price*self.renew_energy # doesn't charge $ when there is no sun out
             # self.battery = self.renew_energy + self.time_energy_requirement[time]
 
-        # fossil fuel dial
         if (action[1] == 1):
-            self.ff_energy = 10*action[1] # need to tune because 15 is arbitrary
-            self.ff_cost = self.ff_price*self.ff_energy
+            self.ff_cost = self.ff_producer.production_cost(self.time_energy_requirement[time], 0)
 
         # reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
         reward = self.reward_min_cost(self.renew_cost, self.ff_cost)        
@@ -75,6 +71,4 @@ class EngEnv:
         self.state[2] = (self.state[2] + 1) % 4
         self.state[3] = get_sunlight()
 
-        # return reward, self.state, self.renew_energy, self.ff_energy
         return reward, self.state
-
