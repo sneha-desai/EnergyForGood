@@ -1,10 +1,10 @@
 import numpy as np
 import sys
 from setup_environment import EngEnv
-from utils import q_learning_update, eps_greedy, print_info
-from plots import smooth_list, plot_learning_curve, get_timestamp, multiBarPlot
-from maps import init_action_map, init_state_map, get_state_index, get_action_index
-from weather import get_sunlight
+from utils import *
+from plots import *
+from maps import *
+from weather import *
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -41,6 +41,9 @@ if __name__ == "__main__":
     state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
     action_map = init_action_map(num_solar_actions, num_fossil_states)
 
+    print(state_map)
+    print(action_map)
+
     print_flag = False
 
     for itr in range(episodes_num):
@@ -59,22 +62,20 @@ if __name__ == "__main__":
         for day in range(num_of_days):
 
             cur_state = env.state
-            print(cur_state)
-            sunlight_coverage = get_sunlight() 
 
             for i in range(num_time_states):
                 cur_state_index = get_state_index(cur_state, state_map)
-                cur_state[2] = i
-                cur_state[3] = sunlight_coverage
 
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
                 action = action_map[action_index]
 
+                #calculate expected next states
+                expected_value_next_state = calculate_expected_next_state(action, cur_state, state_map, Q)
+
+                #don't use next_state until next iteration of for loop
                 reward, next_state = env.step(action, cur_state)
 
-                next_state_index = get_state_index(next_state, state_map)
-
-                q_learning_update(gamma, alpha, Q, cur_state_index, action_index, next_state_index, reward)
+                q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
 
                 cur_state = next_state
                 total_reward += reward

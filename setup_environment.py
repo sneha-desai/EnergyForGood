@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import copy
+from weather import get_sunlight
 
 class EngEnv:
 
@@ -56,7 +57,6 @@ class EngEnv:
 
         if (action[0] == 1):
             self.renew_energy = 10*sun_coverage # 10kWh based on research
-            print(self.renew_energy)
             self.renew_cost = self.renew_price*self.renew_energy
             # if (time == 2):
             #     self.renew_energy = 10
@@ -72,6 +72,8 @@ class EngEnv:
         reward = self.reward_min_cost(self.renew_cost, self.ff_cost)        
         self.state[0] = action[0]
         self.state[1] = action[1]
+        self.state[2] = (self.state[2] + 1) % 4
+        self.state[3] = get_sunlight()
 
         # return reward, self.state, self.renew_energy, self.ff_energy
         return reward, self.state
