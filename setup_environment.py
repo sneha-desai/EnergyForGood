@@ -1,9 +1,9 @@
 import numpy as np
 import math
 import copy
-from weather import get_sunlight
-
+from weather import *
 from EnergyProducer.energy_producer import EnergyProducer
+
 class EngEnv:
     def __init__(self):
         self.time_energy_requirement = [
@@ -53,6 +53,70 @@ class EngEnv:
             reward = -cost
         return reward
 
+    def get_next_state(self, action):
+        self.state[0] = action[0]
+        self.state[1] = action[1]
+        self.state[2] = (self.state[2] + 1) % 4
+        self.state[3] = get_sunlight()
+
+
+    def reward_function(self, action, state, energy_req_after_renewable, energy_req):
+        time = state[2]
+        if action[0] == 1:
+            if time ==2:
+                self.reward += 1
+            else:
+                self.reward -= 1
+
+        if action[1] == 1 and energy_req_after_renewable:
+            self.reward -= 100
+
+        if energy_req > 0:
+            self.reward -= 0
+
+    def reward_function_2(self, solar_energy_called, grid_energy_called, energy_demand):
+        negative_reward = (solar_energy_called-self.solar_energy)**2 + \
+                          (grid_energy_called-self.grid_energy)**2 + \
+                          (energy_demand)**2
+
+        positive_reward = self.solar_energy + self.battery
+
+        return positive_reward - negative_reward
+
+    def step_2(self, action, state):
+        self.reset()
+
+        time = state[2]
+        energy_demand = self.time_energy_requirement[time]
+
+        solar_energy_called = action[0]
+        grid_energy_called = action[1]
+
+        if time == 2:
+            self.solar_energy, self.battery = self.solar_producer.output(energy_demand)
+
+        if self.battery > 0:
+            # The case if there is more energy stored than required in this step
+            if self.battery >= energy_demand:
+                self.battery -= energy_demand
+                energy_demand = 0.0
+            else:
+                energy_demand -= self.battery
+                self.battery -= self.battery
+
+        self.grid_energy, throwaway = self.grid_producer.output(energy_demand)
+        energy_demand -= self.grid_energy
+
+
+        # get the reward
+        self.reward_function_2(solar_energy_called, grid_energy_called, energy_demand)
+
+        # get the next state
+        self.get_next_state(action)
+
+        return self.reward, self.state
+
+
     def step(self, action, state):
         self.reset()
 
@@ -68,12 +132,10 @@ class EngEnv:
 
         if action[0] == 1:
             if time == 2:
-                self.reward += 1
+                # self.reward += 1
                 self.solar_cost = self.solar_producer.production_cost(energy_req, sun_coverage)
                 self.solar_energy, self.battery = self.solar_producer.output(energy_req)
                 energy_req -= self.solar_energy
-            else:
-                self.reward -= 1
 
         if self.battery > 0:
             # The case if there is more energy stored than required in this step
@@ -84,9 +146,11 @@ class EngEnv:
                 energy_req -= self.battery
                 self.battery -= self.battery
 
+        energy_req_after_renewable = energy_req
+
         if action[1] == 1:
             if energy_req <= 0.0:
-                self.reward -= 100
+                # self.reward -= 100
                 print("Grid didn't need to be on")
             else:
                 self.grid_cost = self.grid_producer.production_cost(energy_req, 0)
@@ -96,17 +160,13 @@ class EngEnv:
         # TODO: implement negative reward if energy requirement is not met
         if energy_req > 0:
             # Give some negative reward
-            self.count += 1
             self.reward -= 100
 
+        #get the reward
+        self.reward_function(action, state, energy_req_after_renewable, energy_req)
 
+        #get the next state
+        self.get_next_state(action)
 
-
-        # reward = self.reward_base(self.renew_energy, self.ff_energy, self.battery, self.time_energy_requirement, time)
-        # reward = self.reward_min_cost(self.solar_cost, self.grid_cost)
-        self.state[0] = action[0]
-        self.state[1] = action[1]
-        self.state[2] = (self.state[2] + 1) % 4
-        self.state[3] = get_sunlight()
 
         return self.reward, self.state

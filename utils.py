@@ -58,3 +58,4 @@ def print_info(itr, env):
 
 def get_timestamp():
     return str(datetime.now())
+

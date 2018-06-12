@@ -12,15 +12,15 @@ if __name__ == "__main__":
     else:
         episodes_num = 1000
 
-    num_of_days = 7         # number of days per episode
+    num_of_days = 30         # number of days per episode
 
     num_solar_states = 2
     num_fossil_states = 2
     num_time_states = 4
     num_weather_states = 3
 
-    num_solar_actions = 2
-    num_fossil_actions = 2
+    num_solar_actions = 30
+    num_fossil_actions = 30
 
     Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
     Q_y = num_solar_actions * num_solar_actions
@@ -75,7 +75,7 @@ if __name__ == "__main__":
                 expected_value_next_state = calculate_expected_next_state(action, cur_state, state_map, Q)
 
                 #don't use next_state until next iteration of for loop
-                reward, next_state = env.step(action, cur_state)
+                reward, next_state = env.step_2(action, cur_state)
 
                 q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
 
@@ -86,7 +86,6 @@ if __name__ == "__main__":
                 total_grid_energy += env.grid_energy
                 total_battery = env.battery
 
-        print("Count: ", env.count)
         reSubList.append(total_solar_energy)
         ffSubList.append(total_grid_energy)
         battSubList.append(total_battery)
