@@ -55,7 +55,6 @@ if __name__ == "__main__":
         # Set reward = 0 at the beginning of each episode 
         total_reward = 0
 
-
         for day in range(num_of_days):
 
             cur_state = env.state
@@ -77,11 +76,11 @@ if __name__ == "__main__":
                 cur_state = next_state
                 total_reward += reward
 
-        reSubList.append(env.renew_energy)
-        ffSubList.append(env.ff_energy)
+        reSubList.append(env.solar_energy)
+        ffSubList.append(env.grid_energy)
 
         if print_flag:
-            print_info(itr, env)
+            # print_info(itr, env)
             reList.append(np.mean(reSubList))
             ffList.append(np.mean(ffSubList))
             reSubList = []
