@@ -5,7 +5,7 @@ from weather import get_sunlight, get_wind_power
 
 from EnergyProducer.energy_producer import EnergyProducer
 class EngEnv:
-    def __init__(self):
+    def __init__(self, s_cap):
         self.time_energy_requirement = [
             7,
             8,
@@ -13,7 +13,7 @@ class EngEnv:
             7
         ]
         # solar
-        self.solar_producer = EnergyProducer('solar')
+        self.solar_producer = EnergyProducer('solar', s_cap)
         self.solar_cost = 0
         self.solar_energy = 0 
 
@@ -23,7 +23,7 @@ class EngEnv:
         self.wind_energy = 0
 
         # grid
-        self.grid_producer = EnergyProducer('fossil fuel')
+        self.grid_producer = EnergyProducer('fossil fuel', s_cap)
         self.grid_cost = 0
         self.grid_energy = 0 # how much energy has been produced from fossil fuel 
 
