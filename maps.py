@@ -1,27 +1,33 @@
-def init_action_map(a, b):
+def init_action_map(a, b, c):
     count = 0
     mapping = {}
     for i in range(a):
         for j in range(b):
-            mapping[count] = [i, j]
-            count += 1
+            for k in range(c):
+                mapping[count] = [i, j, k]
+                count += 1
     return mapping
 
-def init_state_map(a, b, c, d):
+
+def init_state_map(a, b, c, d, e, f):
     count = 0
     mapping = {}
     for i in range(a):
         for j in range(b):
             for k in range(c):
                 for l in range(d):
-                    mapping[count] = [i, j, k, l]
-                    count += 1
+                    for m in range(e):
+                        for n in range(f):
+                            mapping[count] = [i, j, k, l, m, n]
+                            count += 1
     return mapping
+
 
 def get_state_index(state, state_map):
     for k, v in state_map.items():
         if v == state:
             return k
+
 
 def get_action_index(action, action_map):
     for k, v in action_map.items():

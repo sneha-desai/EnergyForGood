@@ -15,15 +15,18 @@ if __name__ == "__main__":
     num_of_days = 7         # number of days per episode
 
     num_solar_states = 2
+    num_wind_states = 2
     num_fossil_states = 2
     num_time_states = 4
-    num_weather_states = 3
+    num_sun_states = 3
+    num_wind_states = 3
 
     num_solar_actions = 2
+    num_wind_actions = 2
     num_fossil_actions = 2
 
-    Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
-    Q_y = num_solar_actions * num_solar_actions
+    Q_x = num_solar_states * num_wind_states * num_fossil_states * num_time_states * num_sun_states * num_wind_states
+    Q_y = num_solar_actions * num_wind_actions * num_fossil_actions
 
     Q = np.zeros([Q_x, Q_y])
 
@@ -31,22 +34,24 @@ if __name__ == "__main__":
     alpha = 0.8
     epsilon = 0.1
     rList = []
-    reList = []
+    solarList = []
+    windList = []
     ffList = []
     energyList = []
 
-    reSubList = []
+    solarSubList = []
+    windSubList = []
     ffSubList = []
 
-    state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
-    action_map = init_action_map(num_solar_actions, num_fossil_states)
+    state_map = init_state_map(num_solar_states, num_wind_states, num_fossil_states, num_time_states, num_sun_states, num_wind_states)
+    action_map = init_action_map(num_solar_actions, num_wind_actions, num_fossil_actions)
 
     print_flag = False
 
     for itr in range(episodes_num):
 
         # Printing results every 50 episodes
-        if itr%50 == 0:
+        if itr % 50 == 0:
             print_flag = True
 
         # Reset the state at the beginning of each "week" in this case 
@@ -63,12 +68,13 @@ if __name__ == "__main__":
                 cur_state_index = get_state_index(cur_state, state_map)
 
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
+
                 action = action_map[action_index]
 
-                #calculate expected next states
+                # calculate expected next states
                 expected_value_next_state = calculate_expected_next_state(action, cur_state, state_map, Q)
 
-                #don't use next_state until next iteration of for loop
+                # don't use next_state until next iteration of for loop
                 reward, next_state = env.step(action, cur_state)
 
                 q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
@@ -76,14 +82,18 @@ if __name__ == "__main__":
                 cur_state = next_state
                 total_reward += reward
 
-        reSubList.append(env.solar_energy)
+        solarSubList.append(env.solar_energy)
+        windSubList.append(env.wind_energy)
         ffSubList.append(env.grid_energy)
 
         if print_flag:
             # print_info(itr, env)
-            reList.append(np.mean(reSubList))
+            solarList.append(np.mean(solarSubList))
+            windList.append(np.mean(windSubList))
             ffList.append(np.mean(ffSubList))
-            reSubList = []
+
+            solarSubList = []
+            windSubList = []
             ffSubList = []
 
         print_flag = False
@@ -97,7 +107,8 @@ if __name__ == "__main__":
 
     plot_learning_curve(rList)
 
-    energyList.append(reList)
+    energyList.append(solarList)
+    energyList.append(windList)
     energyList.append(ffList)
-    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
+    multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'r', 'g'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy"])

@@ -25,18 +25,21 @@
 
 resource_capacity = {
     "solar": 10, # Daily capacity for a household solar farm in kWh
+    "wind": 1.2,
     "fossil fuel": 100000,
     "battery": 20 
 }
 
 resource_price = {
     "solar": 0.10, # $/kWh,
+    "wind": 0.16, # $/kWh,
     "fossil fuel": 0.05, # $/kWh
     "battery": 0.00 
 }
 
 resource_init_price = {
     "solar": 20000, # $
+    "wind": 800,
     "fossil fuel": 0, # $
     "battery": 3000
 }

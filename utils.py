@@ -4,9 +4,11 @@ import numpy as np
 from datetime import datetime
 from maps import *
 
+
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
+
 
 def eps_greedy(q_vals, eps, state):
     if random.random() <= eps:
@@ -15,6 +17,7 @@ def eps_greedy(q_vals, eps, state):
     else:
         action = np.argmax(q_vals[state,:])
     return action
+
 
 def calculate_expected_next_state(action, cur_state, state_map, q_vals):
     expected_next_state = [[],[],[]]
@@ -30,12 +33,14 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
     return expected_value_next_state
 
+
 def smooth_list(x):
     smoothing_window = 50
     avg_x = []
     for i in range(len(x)):
         avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
     return avg_x
+
 
 def print_info(itr, env):
     print("*************************")
@@ -55,6 +60,7 @@ def print_info(itr, env):
     else:
         print(("Energy Requirement Met: NO"))
     print("*************************")
+
 
 def get_timestamp():
     return str(datetime.now())
