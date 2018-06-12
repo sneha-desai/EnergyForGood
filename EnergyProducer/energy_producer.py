@@ -20,3 +20,10 @@ class EnergyProducer(object):
             return energy_produced, energy_leftover
         else:
             return energy_produced, 0
+
+    def get_init_price(self):
+        return self.init_price
+
+    def set_init_price(self, val):
+        self.init_price = val
+        return self.init_price

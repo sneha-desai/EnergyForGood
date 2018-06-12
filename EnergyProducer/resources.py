@@ -24,7 +24,7 @@
 #     }
 
 resource_capacity = {
-    "solar": 10, # Daily capacity for a household solar farm in kWh
+    "solar": 20, # Daily capacity for a household solar farm in kWh
     "fossil fuel": 100000,
     "battery": 20 
 }

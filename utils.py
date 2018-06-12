@@ -40,17 +40,17 @@ def smooth_list(x):
 def print_info(itr, env):
     print("*************************")
     print("Iteration : " + str(itr))
-    print("Renewable Energy:" + str(env.renew_energy))
-    print("Fossil Fuel Energy: " + str(env.ff_energy))
-    print("Renewable Energy Cost: " + str(env.renew_cost))
-    print("Fossil Fuel Cost: " + str(env.ff_cost))
+    print("Renewable Energy:" + str(env.solar_energy))
+    print("Fossil Fuel Energy: " + str(env.grid_energy))
+    print("Renewable Energy Cost: " + str(env.solar_cost))
+    print("Fossil Fuel Cost: " + str(env.grid_cost))
     print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
-    if (env.renew_energy + env.ff_energy) > 0:
+    if (env.solar_energy + env.grid_energy) > 0:
         print("Percentage of Renewable : " + str(
-            (float(env.renew_energy) / (env.renew_energy + env.ff_energy)) * 100))
+            (float(env.solar_energy) / (env.solar_energy + env.grid_energy)) * 100))
     else:
         print("NO ENERGY PRODUCED")
-    if (env.time_energy_requirement[3] <= (env.renew_energy + env.ff_energy)):
+    if (env.time_energy_requirement[3] <= (env.solar_energy + env.grid_energy)):
         print("Energy Requirement Met: YES")
     else:
         print(("Energy Requirement Met: NO"))

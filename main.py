@@ -27,16 +27,18 @@ if __name__ == "__main__":
 
     Q = np.zeros([Q_x, Q_y])
 
-    gamma = 0.
+    gamma = 0.95
     alpha = 0.8
     epsilon = 0.1
     rList = []
     reList = []
     ffList = []
+    battList = []
     energyList = []
 
     reSubList = []
     ffSubList = []
+    battSubList = []
 
     state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
     action_map = init_action_map(num_solar_actions, num_fossil_states)
@@ -59,6 +61,10 @@ if __name__ == "__main__":
 
             cur_state = env.state
 
+            total_solar_energy = 0
+            total_grid_energy = 0
+            total_battery = 0
+
             for i in range(num_time_states):
                 cur_state_index = get_state_index(cur_state, state_map)
 
@@ -76,13 +82,20 @@ if __name__ == "__main__":
                 cur_state = next_state
                 total_reward += reward
 
-        reSubList.append(env.solar_energy)
-        ffSubList.append(env.grid_energy)
+                total_solar_energy += env.solar_energy
+                total_grid_energy += env.grid_energy
+                total_battery = env.battery
+
+        print("Count: ", env.count)
+        reSubList.append(total_solar_energy)
+        ffSubList.append(total_grid_energy)
+        battSubList.append(total_battery)
 
         if print_flag:
-            # print_info(itr, env)
+            print_info(itr, env)
             reList.append(np.mean(reSubList))
             ffList.append(np.mean(ffSubList))
+            battList.append(np.mean(battSubList))
             reSubList = []
             ffSubList = []
 
@@ -99,5 +112,7 @@ if __name__ == "__main__":
 
     energyList.append(reList)
     energyList.append(ffList)
-    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy"])
+    energyList.append(battList)
+    energyList.append
+    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g', 'r'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy", "Solar Battery"])

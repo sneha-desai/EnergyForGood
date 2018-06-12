@@ -15,7 +15,7 @@ def multiBarPlot(x, y, colors, ylabel, title, legends):
     ax.set_title(title)
     ax.set_xticks(ind + width)
     ax.set_xticklabels(x)
-    ax.legend((rects[0][0], rects[1][0]), legends)
+    ax.legend((rects[0][0], rects[1][0], rects[2][0]), legends)
     time = get_timestamp()
     plt.savefig('plots/{}.png'.format(title + time))
 
