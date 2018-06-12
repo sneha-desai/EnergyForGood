@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import copy
+from weather import get_sunlight
 
 from EnergyProducer.energy_producer import EnergyProducer
 class EngEnv:
@@ -90,5 +91,7 @@ class EngEnv:
         reward = self.reward_min_cost(self.solar_cost, self.grid_cost)        
         self.state[0] = action[0]
         self.state[1] = action[1]
+        self.state[2] = (self.state[2] + 1) % 4
+        self.state[3] = get_sunlight()
 
         return reward, self.state

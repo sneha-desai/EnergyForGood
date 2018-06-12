@@ -1,9 +1,6 @@
-from setup_environment import EngEnv
-import random
 import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime
-from utils import get_timestamp
+from utils import get_timestamp, smooth_list
 
 def multiBarPlot(x, y, colors, ylabel, title, legends):
     N = len(x)
@@ -38,10 +35,4 @@ def plot_learning_curve(rList):
     plt.close()
 
 
-def smooth_list(x):
-    smoothing_window = 50
-    avg_x = []
-    for i in range(len(x)):
-        avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
-    return avg_x
 
