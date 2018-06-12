@@ -1,11 +1,13 @@
-from EnergyProducer.resources import resource_capacity, resource_price, resource_init_price
+from EnergyProducer.resources import * #resource_capacity, resource_price, resource_init_price
 
 class EnergyProducer(object):
-    def __init__(self, type):
+    def __init__(self, type, s_cap):
         self.type = type
+        #print(type)
+        #print(location)
         self.unit_price = resource_price[type]
         self.init_price = resource_init_price[type]
-        self.capacity = resource_capacity[type]
+        self.capacity = resource_capacity(type, s_cap)
 
     def production_cost(self, quantity, sun_coverage):
         if (sun_coverage):
@@ -14,6 +16,7 @@ class EnergyProducer(object):
             return self.unit_price*quantity
 
     def output(self, quantity):
+        #print("The capacity is ", self.capacity)
         energy_produced = min(quantity, self.capacity)
         if (self.capacity > quantity):
             energy_leftover = self.capacity - quantity
