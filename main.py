@@ -5,7 +5,10 @@ from utils import *
 from plots import *
 from maps import *
 from weather import *
+from EnergyProducer.solar_by_region_API import *
 
+#for now let's say location is california always (but maybe eventually will be an argument passed)
+location = 'California'
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
@@ -43,6 +46,8 @@ if __name__ == "__main__":
 
     print_flag = False
 
+    s_cap = api_call(location) #solar energy from api
+
     for itr in range(episodes_num):
 
         # Printing results every 50 episodes
@@ -50,7 +55,7 @@ if __name__ == "__main__":
             print_flag = True
 
         # Reset the state at the beginning of each "week" in this case 
-        env = EngEnv()
+        env = EngEnv(s_cap)
 
         # Set reward = 0 at the beginning of each episode 
         total_reward = 0
