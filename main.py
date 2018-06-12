@@ -1,7 +1,8 @@
 import numpy as np
 import sys
 from setup_environment import EngEnv
-from utils import q_learning_update, eps_greedy, print_info
+# from utils import q_learning_update, eps_greedy, print_info
+from utils import q_learning_update, eps_greedy
 from plots import smooth_list, plot_learning_curve, get_timestamp, multiBarPlot
 from maps import init_action_map, init_state_map, get_state_index, get_action_index
 from weather import get_sunlight
@@ -55,11 +56,9 @@ if __name__ == "__main__":
         # Set reward = 0 at the beginning of each episode 
         total_reward = 0
 
-
         for day in range(num_of_days):
 
             cur_state = env.state
-            print(cur_state)
             sunlight_coverage = get_sunlight() 
 
             for i in range(num_time_states):
@@ -79,11 +78,11 @@ if __name__ == "__main__":
                 cur_state = next_state
                 total_reward += reward
 
-        reSubList.append(env.renew_energy)
-        ffSubList.append(env.ff_energy)
+        reSubList.append(env.solar_energy)
+        ffSubList.append(env.grid_energy)
 
         if print_flag:
-            print_info(itr, env)
+            # print_info(itr, env)
             reList.append(np.mean(reSubList))
             ffList.append(np.mean(ffSubList))
             reSubList = []
