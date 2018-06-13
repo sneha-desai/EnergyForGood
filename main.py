@@ -97,7 +97,7 @@ if __name__ == "__main__":
                 #don't use next_state until next iteration of for loop
                 reward, next_state = env.step(action, cur_state)
 
-                q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
+                Q = q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
 
                 cur_state = next_state
                 total_reward += reward

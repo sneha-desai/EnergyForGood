@@ -8,7 +8,7 @@ from maps import *
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
-
+    return q_vals
 
 def eps_greedy(q_vals, eps, state):
     if random.random() <= eps:
