@@ -14,8 +14,6 @@ if __name__ == "__main__":
 
     num_of_days = 30        # number of days per episode
 
-    # num_solar_states = 10
-    # num_fossil_states = 10
     num_time_states = 4
     num_weather_states = 3
 
@@ -91,19 +89,19 @@ if __name__ == "__main__":
                 total_grid_energy += env.grid_energy
                 total_battery = env.battery_energy
 
-                #
-                # print(reward)
-                # print(action)
-                # print("solar energy ", env.solar_energy)
-                # print("grid energy", env.grid_energy)
-                # print("battery", env.battery_energy)
+
+                print(reward)
+                print(action)
+                print("solar energy ", env.solar_energy)
+                print("grid energy", env.grid_energy)
+                print("battery", env.battery_energy)
 
             reSubList.append(total_solar_energy)
             ffSubList.append(total_grid_energy)
             battSubList.append(total_battery)
 
         if print_flag:
-            print_info(itr, env)
+            # print_info(itr, env)
             reList.append(np.mean(reSubList))
             ffList.append(np.mean(ffSubList))
             battList.append(np.mean(battSubList))
