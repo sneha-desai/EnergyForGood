@@ -1,12 +1,11 @@
 import numpy as np
 import random
 
-import maps
-import utils
+import utils.maps as maps
+import utils.utils as utils
 
-class Agent:
+class Agent: 
     def __init__(self):
-        self.num_of_days = 30        # number of days per episode
         self.num_states = {
             "time": 4,
             "sun": 3,

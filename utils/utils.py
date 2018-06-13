@@ -1,9 +1,8 @@
-from setup_environment import EnergyEnvironment
 import random
 import numpy as np
 from datetime import datetime
-import maps
 
+import utils.maps as maps
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]

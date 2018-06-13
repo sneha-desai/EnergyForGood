@@ -1,10 +1,12 @@
 import numpy as np
 import sys
-from setup_environment import EnergyEnvironment
-import utils 
-from plots import *
-from EnergyProducer.solar_by_region_API import *
-from agent import Agent 
+
+import utils.utils as utils
+import utils.plots as plots 
+import utils.maps as maps
+from model.environment import EnergyEnvironment
+from data.solar_by_region_API import api_call
+from model.agent import Agent
 
 #for now let's say location is california always (but maybe eventually will be an argument passed)
 location = 'California'
@@ -49,11 +51,8 @@ if __name__ == "__main__":
         if itr%print_iteration == 0:
             print_flag = True
 
-        # Reset the state at the beginning of each "week" in this case 
         env = EnergyEnvironment(s_cap)
         cur_state = env.state
-
-        # Set reward = 0 at the beginning of each episode 
         total_reward = 0
 
         for day in range(num_of_days):
@@ -101,11 +100,11 @@ if __name__ == "__main__":
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
 
-    plot_learning_curve(rList)
+    plots.plot_learning_curve(rList)
 
     energyList.append(solarList)
     energyList.append(windList)
     energyList.append(ffList)
     energyList.append(battList)
-    multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple'], ylabel="Energy (kWh)",
+    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage"])
