@@ -24,6 +24,13 @@
 #     }
 #from EnergyProducer.solar_by_region_API import *
 
+
+resource_capacity = {
+    "solar": 20, # Daily capacity for a household solar farm in kWh
+    "fossil fuel": 100000,
+    "battery": 20 
+}
+
 def resource_capacity(thetype, s_cap):
     if thetype == "solar": return s_cap # return api_call(location)
     elif thetype == "wind": return s_cap
@@ -35,6 +42,7 @@ def resource_capacity(thetype, s_cap):
 #     "fossil fuel": 100000,
 #     "battery": 20 
 # }
+
 
 resource_price = {
     "solar": 0.10, # $/kWh,

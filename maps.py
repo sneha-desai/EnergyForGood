@@ -8,18 +8,14 @@ def init_action_map(a, b, c):
                 count += 1
     return mapping
 
-
-def init_state_map(a, b, c, d, e, f):
+def init_state_map(a, b, c):
     count = 0
     mapping = {}
     for i in range(a):
         for j in range(b):
-            for k in range(c):
-                for l in range(d):
-                    for m in range(e):
-                        for n in range(f):
-                            mapping[count] = [i, j, k, l, m, n]
-                            count += 1
+          for k in range(c):
+              mapping[count] = [i, j, k]
+              count += 1
     return mapping
 
 
