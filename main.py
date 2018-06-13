@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-from setup_environment import EngEnv
+from setup_environment import EnergyEnvironment
 from utils import *
 from plots import *
 from maps import *
@@ -12,24 +12,28 @@ if __name__ == "__main__":
     else:
         episodes_num = 1000
 
-    num_of_days = 30         # number of days per episode
+    num_of_days = 30        # number of days per episode
 
-    num_solar_states = 2
-    num_fossil_states = 2
+    # num_solar_states = 10
+    # num_fossil_states = 10
     num_time_states = 4
     num_weather_states = 3
 
-    num_solar_actions = 30
-    num_fossil_actions = 30
+    num_solar_actions = 10
+    num_fossil_actions = 10
 
-    Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
+    # Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
+    Q_x = num_time_states * num_weather_states
+
     Q_y = num_solar_actions * num_solar_actions
 
     Q = np.zeros([Q_x, Q_y])
 
+    print_iteration = 50
+
     gamma = 0.95
     alpha = 0.8
-    epsilon = 0.1
+    epsilon = 0.4
     rList = []
     reList = []
     ffList = []
@@ -40,19 +44,20 @@ if __name__ == "__main__":
     ffSubList = []
     battSubList = []
 
-    state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
-    action_map = init_action_map(num_solar_actions, num_fossil_states)
+    # state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
+    state_map = init_state_map(num_time_states, num_weather_states)
+    action_map = init_action_map(num_solar_actions, num_fossil_actions)
 
     print_flag = False
 
     for itr in range(episodes_num):
 
         # Printing results every 50 episodes
-        if itr%50 == 0:
+        if itr%print_iteration == 0:
             print_flag = True
 
         # Reset the state at the beginning of each "week" in this case 
-        env = EngEnv()
+        env = EnergyEnvironment()
 
         # Set reward = 0 at the beginning of each episode 
         total_reward = 0
@@ -84,14 +89,22 @@ if __name__ == "__main__":
 
                 total_solar_energy += env.solar_energy
                 total_grid_energy += env.grid_energy
-                total_battery = env.battery
+                total_battery = env.battery_energy
 
-        reSubList.append(total_solar_energy)
-        ffSubList.append(total_grid_energy)
-        battSubList.append(total_battery)
+                #
+                # print(reward)
+                # print(action)
+                # print("solar energy ", env.solar_energy)
+                # print("grid energy", env.grid_energy)
+                # print("battery", env.battery_energy)
+
+            reSubList.append(total_solar_energy)
+            ffSubList.append(total_grid_energy)
+            battSubList.append(total_battery)
+        epsilon = max(0, epsilon-0.05)
 
         if print_flag:
-            print_info(itr, env)
+            # print_info(itr, env)
             reList.append(np.mean(reSubList))
             ffList.append(np.mean(ffSubList))
             battList.append(np.mean(battSubList))
@@ -99,6 +112,10 @@ if __name__ == "__main__":
             ffSubList = []
 
         print_flag = False
+
+        # print("***********")
+        # print(total_reward)
+        # print("***********")
 
         #total reward per episode appended for learning curve visualization
         rList.append(total_reward)
@@ -114,4 +131,4 @@ if __name__ == "__main__":
     energyList.append(battList)
     energyList.append
     multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g', 'r'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy", "Solar Battery"])
+                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy", "Battery Storage"])

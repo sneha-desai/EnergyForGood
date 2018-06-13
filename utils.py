@@ -1,4 +1,4 @@
-from setup_environment import EngEnv
+from setup_environment import EnergyEnvironment
 import random
 import numpy as np
 from datetime import datetime
@@ -16,13 +16,27 @@ def eps_greedy(q_vals, eps, state):
         action = np.argmax(q_vals[state,:])
     return action
 
+# def calculate_expected_next_state(action, cur_state, state_map, q_vals):
+#     expected_next_state = [[],[],[]]
+#     expected_next_state_array_indices = []
+#     max_q_values = []
+#     expected_next_state[0] = [action[0], action[1], (cur_state[2]+1)%4, 0] #cloudy (20% chance)
+#     expected_next_state[1] = [action[0], action[1], (cur_state[2]+1)%4, 1] #partially cloudy (20% chance)
+#     expected_next_state[2] = [action[0], action[1], (cur_state[2]+1)%4, 2] #sunny (60% chance)
+#     for i in range(len(expected_next_state)):
+#         expected_next_state_array_indices.append(get_state_index(expected_next_state[i], state_map))
+#     for j in  range(len(expected_next_state_array_indices)):
+#         max_q_values.append(np.max(q_vals[expected_next_state_array_indices[i], :]))
+#     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
+#     return expected_value_next_state
+
 def calculate_expected_next_state(action, cur_state, state_map, q_vals):
     expected_next_state = [[],[],[]]
     expected_next_state_array_indices = []
     max_q_values = []
-    expected_next_state[0] = [action[0], action[1], (cur_state[2]+1)%4, 0] #cloudy (20% chance)
-    expected_next_state[1] = [action[0], action[1], (cur_state[2]+1)%4, 1] #partially cloudy (20% chance)
-    expected_next_state[2] = [action[0], action[1], (cur_state[2]+1)%4, 2] #sunny (60% chance)
+    expected_next_state[0] = [(cur_state[0]+1)%4, 0] #cloudy (20% chance)
+    expected_next_state[1] = [(cur_state[0]+1)%4, 1] #partially cloudy (20% chance)
+    expected_next_state[2] = [(cur_state[0]+1)%4, 2] #sunny (60% chance)
     for i in range(len(expected_next_state)):
         expected_next_state_array_indices.append(get_state_index(expected_next_state[i], state_map))
     for j in  range(len(expected_next_state_array_indices)):

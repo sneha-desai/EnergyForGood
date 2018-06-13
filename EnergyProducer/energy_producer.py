@@ -16,7 +16,7 @@ class EnergyProducer(object):
     def output(self, quantity):
         energy_produced = min(quantity, self.capacity)
         if (self.capacity > quantity):
-            energy_leftover = self.capacity - quantity
+            energy_leftover = quantity - self.capacity
             return energy_produced, energy_leftover
         else:
             return energy_produced, 0
@@ -27,3 +27,7 @@ class EnergyProducer(object):
     def set_init_price(self, val):
         self.init_price = val
         return self.init_price
+
+    def truncate(self, amount):
+        amount = max(0, amount)
+        return min(self.capacity, amount)
