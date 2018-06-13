@@ -1,9 +1,8 @@
-from setup_environment import EnergyEnvironment
 import random
 import numpy as np
 from datetime import datetime
-from maps import *
 
+import utils.maps as maps
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]
@@ -63,7 +62,7 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
     expected_next_state[8] = [(cur_state[0]+1)%4, 2, 2] #sunny (60% chance)
 
     for i in range(len(expected_next_state)):
-        expected_next_state_array_indices.append(get_state_index(expected_next_state[i], state_map))
+        expected_next_state_array_indices.append(maps.get_state_index(expected_next_state[i], state_map))
 
     for j in range(len(expected_next_state_array_indices)):
         # this was originally 'i' but shouldn't it be j???

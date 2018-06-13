@@ -1,11 +1,9 @@
 import numpy as np
 import math
 import copy
-from weather import *
-from EnergyProducer.energy_producer import EnergyProducer
-from weather import get_sunlight, get_wind_power
 
-import pdb
+import data.weather as weather
+from model.producer import EnergyProducer
 
 class EnergyEnvironment:
     def __init__(self, s_cap):
@@ -66,8 +64,8 @@ class EnergyEnvironment:
 
     def get_next_state(self, action):
         self.state[self.time_index] = (self.state[self.time_index] + 1) % 4
-        self.state[self.sun_coverage_index] = get_sunlight()
-        self.state[self.wind_power_index] = get_wind_power()
+        self.state[self.sun_coverage_index] = weather.get_sunlight()
+        self.state[self.wind_power_index] = weather.get_wind_power()
 
     def reward_function(self, solar_energy_called, grid_energy_called, wind_energy_called, energy_demand,
                         grid_energy_produced,solar_energy_produced, wind_energy_produced, battery_used):
