@@ -4,9 +4,11 @@ import numpy as np
 from datetime import datetime
 from maps import *
 
+
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
+
 
 def eps_greedy(q_vals, eps, state):
     if random.random() <= eps:
@@ -31,18 +33,47 @@ def eps_greedy(q_vals, eps, state):
 #     return expected_value_next_state
 
 def calculate_expected_next_state(action, cur_state, state_map, q_vals):
-    expected_next_state = [[],[],[]]
+    expected_next_state = [[], [], [], [], [], [], [], [], []]
     expected_next_state_array_indices = []
     max_q_values = []
-    expected_next_state[0] = [(cur_state[0]+1)%4, 0] #cloudy (20% chance)
-    expected_next_state[1] = [(cur_state[0]+1)%4, 1] #partially cloudy (20% chance)
-    expected_next_state[2] = [(cur_state[0]+1)%4, 2] #sunny (60% chance)
+# <<<<<<< sneha_2
+#     expected_next_state[0] = [(cur_state[0]+1)%4, 0] #cloudy (20% chance)
+#     expected_next_state[1] = [(cur_state[0]+1)%4, 1] #partially cloudy (20% chance)
+#     expected_next_state[2] = [(cur_state[0]+1)%4, 2] #sunny (60% chance)
+#     for i in range(len(expected_next_state)):
+#         expected_next_state_array_indices.append(get_state_index(expected_next_state[i], state_map))
+#     for j in  range(len(expected_next_state_array_indices)):
+#         max_q_values.append(np.max(q_vals[expected_next_state_array_indices[j], :]))
+#     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
+# =======
+
+    # not windy (20%)
+    expected_next_state[0] = [(cur_state[0]+1)%4, 0, 0] #cloudy (20% chance)
+    expected_next_state[1] = [(cur_state[0]+1)%4, 1, 0] #partially cloudy (20% chance)
+    expected_next_state[2] = [(cur_state[0]+1)%4, 2, 0] #sunny (60% chance)
+
+    # partially windy (50%)
+    expected_next_state[3] = [(cur_state[0]+1)%4, 0, 1] #cloudy (20% chance)
+    expected_next_state[4] = [(cur_state[0]+1)%4, 1, 1] #partially cloudy (20% chance)
+    expected_next_state[5] = [(cur_state[0]+1)%4, 2, 1] #sunny (60% chance)
+
+    # windy (30%)
+    expected_next_state[6] = [(cur_state[0]+1)%4, 0, 2] #cloudy (20% chance)
+    expected_next_state[7] = [(cur_state[0]+1)%4, 1, 2] #partially cloudy (20% chance)
+    expected_next_state[8] = [(cur_state[0]+1)%4, 2, 2] #sunny (60% chance)
+
     for i in range(len(expected_next_state)):
         expected_next_state_array_indices.append(get_state_index(expected_next_state[i], state_map))
-    for j in  range(len(expected_next_state_array_indices)):
+
+    for j in range(len(expected_next_state_array_indices)):
+        # this was originally 'i' but shouldn't it be j???
         max_q_values.append(np.max(q_vals[expected_next_state_array_indices[j], :]))
-    expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
+
+    expected_value_next_state = 0.2 * 0.2 * max_q_values[0] + 0.2 * 0.2 * max_q_values[1] + 0.6 * 0.2 * max_q_values[2] + \
+                                0.2 * 0.5 * max_q_values[3] + 0.2 * 0.5 * max_q_values[4] + 0.6 * 0.5 * max_q_values[5] + \
+                                0.2 * 0.3 * max_q_values[6] + 0.2 * 0.3 * max_q_values[7] + 0.6 * 0.3 * max_q_values[8]
     return expected_value_next_state
+
 
 def smooth_list(x):
     smoothing_window = 50
@@ -50,6 +81,7 @@ def smooth_list(x):
     for i in range(len(x)):
         avg_x.append(np.mean(x[max(0, i - smoothing_window):i]))
     return avg_x
+
 
 def print_info(itr, env):
     print("*************************")
@@ -69,6 +101,7 @@ def print_info(itr, env):
     else:
         print(("Energy Requirement Met: NO"))
     print("*************************")
+
 
 def get_timestamp():
     return str(datetime.now())

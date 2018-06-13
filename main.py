@@ -5,7 +5,10 @@ from utils import *
 from plots import *
 from maps import *
 from weather import *
+from EnergyProducer.solar_by_region_API import *
 
+#for now let's say location is california always (but maybe eventually will be an argument passed)
+location = 'California'
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
@@ -15,15 +18,21 @@ if __name__ == "__main__":
     num_of_days = 30        # number of days per episode
 
     num_time_states = 4
-    num_weather_states = 3
+    num_sun_states = 3
+    num_wind_states = 3
 
     num_solar_actions = 20
     num_fossil_actions = 20
+    num_wind_actions = 2
 
     # Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
     Q_x = num_time_states * num_weather_states
 
     Q_y = num_solar_actions * num_solar_actions
+
+
+    Q_x = num_time_states * num_sun_states * num_wind_states
+    Q_y = num_solar_actions * num_wind_actions * num_fossil_actions
 
     Q = np.zeros([Q_x, Q_y])
 
@@ -33,20 +42,23 @@ if __name__ == "__main__":
     alpha = 0.8
     epsilon = 0.5
     rList = []
-    reList = []
+    solarList = []
+    windList = []
     ffList = []
     battList = []
     energyList = []
 
-    reSubList = []
+    solarSubList = []
+    windSubList = []
     ffSubList = []
     battSubList = []
 
-    # state_map = init_state_map(num_solar_states, num_fossil_states, num_time_states, num_weather_states)
-    state_map = init_state_map(num_time_states, num_weather_states)
-    action_map = init_action_map(num_solar_actions, num_fossil_actions)
+    state_map = init_state_map(num_time_states, num_sun_states, num_wind_states)
+    action_map = init_action_map(num_solar_actions, num_wind_actions, num_fossil_actions)
 
     print_flag = False
+
+    s_cap = api_call(location) #solar energy from api
 
     for itr in range(episodes_num):
 
@@ -72,9 +84,10 @@ if __name__ == "__main__":
                 cur_state_index = get_state_index(cur_state, state_map)
 
                 action_index = eps_greedy(Q, epsilon, cur_state_index)
+
                 action = action_map[action_index]
 
-                #calculate expected next states
+                # calculate expected next states
                 expected_value_next_state = calculate_expected_next_state(action, cur_state, state_map, Q)
 
                 #don't use next_state until next iteration of for loop
@@ -102,32 +115,30 @@ if __name__ == "__main__":
 
         if print_flag:
             # print_info(itr, env)
-            reList.append(np.mean(reSubList))
+            solarList.append(np.mean(solarSubList))
+            windList.append(np.mean(windSubList))
             ffList.append(np.mean(ffSubList))
             battList.append(np.mean(battSubList))
             reSubList = []
+            solarSubList = []
+            windSubList = []
             ffSubList = []
 
         print_flag = False
-
-        # print("***********")
-        # print(total_reward)
-        # print("***********")
 
         #total reward per episode appended for learning curve visualization
         rList.append(total_reward)
 
         epsilon = max(0, epsilon-0.0005)
-
-
+        
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
 
     plot_learning_curve(rList)
 
-    energyList.append(reList)
+    energyList.append(solarList)
+    energyList.append(windList)
     energyList.append(ffList)
     energyList.append(battList)
-    energyList.append
-    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g', 'r'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Renewable Energy", "Fossil Fuel Energy", "Battery Storage"])
+    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g', 'r', 'y'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Renewable Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage"])
