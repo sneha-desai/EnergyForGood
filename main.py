@@ -51,13 +51,16 @@ if __name__ == "__main__":
 
     print_flag = False
 
-    s_cap = api_call(location) #solar energy from api
+    months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+    s_cap, solar_dict = api_call(location) #solar energy from api
 
     for itr in range(episodes_num):
 
         # Printing results every 50 episodes
         if itr % 50 == 0:
             print_flag = True
+ 
+        s_cap = int(solar_dict[months[itr%12]])
 
         # Reset the state at the beginning of each "week" in this case 
         env = EngEnv(s_cap)
