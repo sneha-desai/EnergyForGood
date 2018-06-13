@@ -26,7 +26,7 @@ if __name__ == "__main__":
     num_wind_actions = 2
 
     # Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
-    Q_x = num_time_states * num_weather_states
+    Q_x = num_time_states * num_sun_states * num_wind_states
 
     Q_y = num_solar_actions * num_solar_actions
 
@@ -38,9 +38,13 @@ if __name__ == "__main__":
 
     print_iteration = 50
 
+
+    #Learning paramenters
     gamma = 0.95
     alpha = 0.8
     epsilon = 0.5
+
+    # List parameters
     rList = []
     solarList = []
     windList = []
@@ -48,6 +52,7 @@ if __name__ == "__main__":
     battList = []
     energyList = []
 
+    # SubList paramenters
     solarSubList = []
     windSubList = []
     ffSubList = []
@@ -67,7 +72,7 @@ if __name__ == "__main__":
             print_flag = True
 
         # Reset the state at the beginning of each "week" in this case 
-        env = EnergyEnvironment()
+        env = EnergyEnvironment(s_cap)
 
         # Set reward = 0 at the beginning of each episode 
         total_reward = 0
@@ -91,7 +96,7 @@ if __name__ == "__main__":
                 expected_value_next_state = calculate_expected_next_state(action, cur_state, state_map, Q)
 
                 #don't use next_state until next iteration of for loop
-                reward, next_state = env.step_2(action, cur_state)
+                reward, next_state = env.step(action, cur_state)
 
                 q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
 
@@ -101,17 +106,12 @@ if __name__ == "__main__":
                 total_solar_energy += env.solar_energy
                 total_grid_energy += env.grid_energy
                 total_battery = env.battery_energy
+                total_wind_energy = env.wind_energy
 
-                #
-                # print(reward)
-                # print("Action: " , action)
-                # print("solar energy ", env.solar_energy)
-                # print("grid energy", env.grid_energy)
-                # print("battery", env.battery_energy)
-
-            reSubList.append(total_solar_energy)
+            solarSubList.append(total_solar_energy)
             ffSubList.append(total_grid_energy)
             battSubList.append(total_battery)
+            windSubList.append(total_wind_energy)
 
         if print_flag:
             # print_info(itr, env)
@@ -119,7 +119,6 @@ if __name__ == "__main__":
             windList.append(np.mean(windSubList))
             ffList.append(np.mean(ffSubList))
             battList.append(np.mean(battSubList))
-            reSubList = []
             solarSubList = []
             windSubList = []
             ffSubList = []
@@ -140,5 +139,5 @@ if __name__ == "__main__":
     energyList.append(windList)
     energyList.append(ffList)
     energyList.append(battList)
-    multiBarPlot(list(range(len(reList))), energyList, colors=['b', 'g', 'r', 'y'], ylabel="Energy (kWh)",
+    multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'y'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Renewable Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage"])
