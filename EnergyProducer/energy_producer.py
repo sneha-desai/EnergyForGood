@@ -28,8 +28,25 @@ class EnergyProducer(object):
 
         energy_produced = min(energy_required, energy_produced)
 
-        if energy_produced > energy_required:
-            energy_leftover = energy_produced - energy_required
-            return energy_produced, energy_leftover
-        else:
-            return energy_produced, 0
+#     def output(self, quantity):
+#         energy_produced = min(quantity, self.capacity)
+#         if (self.capacity > energy_produced):
+#             energy_leftover = energy_produced - self.capacity
+#             return energy_produced, energy_leftover
+#         else:
+#             return energy_produced, 0
+
+    def output_2(self, quantity, coverage=1):
+        energy_produced = min(quantity, self.capacity*coverage)
+        return energy_produced
+
+    def get_init_price(self):
+        return self.init_price
+
+    def set_init_price(self, val):
+        self.init_price = val
+        return self.init_price
+
+    def truncate(self, quantity):
+        quantity = max(0, quantity)
+        return min(self.capacity, quantity)
