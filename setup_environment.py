@@ -18,7 +18,7 @@ class EngEnv:
         self.solar_energy = 0 
 
         # wind
-        self.wind_producer = EnergyProducer('wind')
+        self.wind_producer = EnergyProducer('wind', s_cap)
         self.wind_cost = 0
         self.wind_energy = 0
 
