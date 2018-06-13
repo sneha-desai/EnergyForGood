@@ -126,13 +126,13 @@ class EnergyEnvironment:
         return self.reward, self.state
 
 
-    def reward_function_2(self, solar_energy_called, grid_energy_called, energy_demand):
-        negative_reward = (solar_energy_called-self.solar_energy)**2 + \
-                          (grid_energy_called-self.grid_energy)**2 + \
-                          (energy_demand - (self.solar_energy + self.grid_energy))**3 + \
-                          (self.grid_energy)**4
+    def reward_function_2(self, solar_energy_called, grid_energy_called, energy_leftover, grid_energy_produced, solar_energy_produced):
+        negative_reward = (solar_energy_called-solar_energy_produced)**2 + \
+                          (grid_energy_called-grid_energy_produced)**2 + \
+                          abs((energy_leftover)**3) + \
+                          (self.grid_energy)**2
 
-        positive_reward = (self.solar_energy + self.battery_energy)**4
+        positive_reward = (self.solar_energy)**4 + (self.battery_energy)**4
 
         self.reward = positive_reward - negative_reward
 
@@ -148,7 +148,7 @@ class EnergyEnvironment:
             sun_coverage = 0
 
         energy_demand = self.time_energy_requirement[time]
-        energy_req = self.time_energy_requirement[time]
+        # energy_req = self.time_energy_requirement[time]
 
         # print("********************")
         # print("Action: ", action)
@@ -161,24 +161,33 @@ class EnergyEnvironment:
         #     self.solar_energy, self.battery_energy = self.solar_producer.output(solar_energy_called)
         #     self.battery_energy = self.battery.truncate(self.battery_energy)
 
-        self.solar_energy, self.battery_energy = self.solar_producer.output(solar_energy_called, sun_coverage)
+        solar_energy_produced = self.solar_producer.output_2(solar_energy_called, sun_coverage)
+        self.solar_energy = copy.deepcopy(solar_energy_produced)
+        if self.solar_energy > energy_demand:
+            self.battery_energy += self.solar_energy - energy_demand
+            energy_req = 0.0
+        else:
+            energy_req = energy_demand - self.solar_energy
+
+        #make sure battery energy isn't greater than amount of energy it can store
         self.battery_energy = self.battery.truncate(self.battery_energy)
 
-        if self.battery_energy > 0:
-            # The case if there is more energy stored than demanded in this step
-            if self.battery_energy >= energy_demand:
-                self.battery_energy -= energy_demand
-                energy_req = 0.0
-            else:
-                energy_req -= self.battery_energy
-                self.battery_energy = 0.0
+        #if there is still some energy needed use battery first
+        if energy_req >= self.battery_energy:
+            energy_req =- self.battery_energy
+            self.battery_energy = 0
+        else:
+            self.battery_energy -= energy_req
+            energy_req = 0
 
-        self.grid_energy, throwaway = self.grid_producer.output(grid_energy_called, 1)
-        energy_req -= self.grid_energy
-
+        #if there is still some energy needed, use grid
+        grid_energy_produced = self.grid_producer.output_2(grid_energy_called, 1)
+        self.grid_energy= grid_energy_produced
+        if energy_req >= self.grid_energy:
+            energy_req -= self.grid_energy
 
         # get the reward
-        self.reward_function_2(solar_energy_called, grid_energy_called, energy_demand)
+        self.reward_function_2(solar_energy_called, grid_energy_called, energy_req, grid_energy_produced, solar_energy_produced)
 
         # print("State: ", state)
 

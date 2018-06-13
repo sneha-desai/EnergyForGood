@@ -10,7 +10,7 @@ def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_ne
 
 def eps_greedy(q_vals, eps, state):
     if random.random() <= eps:
-        action = random.randint(0,3)
+        action = random.randint(0,9)
         return action # sample an action randomly # sample an action randomly
     else:
         action = np.argmax(q_vals[state,:])
@@ -40,7 +40,7 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
     for i in range(len(expected_next_state)):
         expected_next_state_array_indices.append(get_state_index(expected_next_state[i], state_map))
     for j in  range(len(expected_next_state_array_indices)):
-        max_q_values.append(np.max(q_vals[expected_next_state_array_indices[i], :]))
+        max_q_values.append(np.max(q_vals[expected_next_state_array_indices[j], :]))
     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
     return expected_value_next_state
 

@@ -103,7 +103,7 @@ if __name__ == "__main__":
             battSubList.append(total_battery)
 
         if print_flag:
-            # print_info(itr, env)
+            print_info(itr, env)
             reList.append(np.mean(reSubList))
             ffList.append(np.mean(ffSubList))
             battList.append(np.mean(battSubList))
@@ -120,7 +120,6 @@ if __name__ == "__main__":
         rList.append(total_reward)
 
         epsilon = max(0, epsilon-0.0005)
-        print(epsilon)
 
 
     print("Score over time: " + str(sum(rList) / episodes_num))

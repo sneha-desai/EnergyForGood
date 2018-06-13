@@ -13,14 +13,17 @@ class EnergyProducer(object):
         else:
             return self.unit_price*quantity
 
-    def output(self, quantity, sun_coverage):
+    def output(self, quantity):
         energy_produced = min(quantity, self.capacity)
-        energy_produced = energy_produced*sun_coverage
         if (self.capacity > energy_produced):
             energy_leftover = energy_produced - self.capacity
             return energy_produced, energy_leftover
         else:
             return energy_produced, 0
+
+    def output_2(self, quantity, coverage=1):
+        energy_produced = min(quantity, self.capacity*coverage)
+        return energy_produced
 
     def get_init_price(self):
         return self.init_price
