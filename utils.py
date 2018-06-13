@@ -10,7 +10,7 @@ def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_ne
 
 def eps_greedy(q_vals, eps, state):
     if random.random() <= eps:
-        action = random.randint(0,9)
+        action = random.randint(0,399)
         return action # sample an action randomly # sample an action randomly
     else:
         action = np.argmax(q_vals[state,:])

@@ -139,12 +139,13 @@ class EnergyEnvironment:
 
         positive_reward = abs(solar_energy_produced)+ abs(battery_used)
 
+        # print("Negative Reward: ", negative_reward)
+        # print("Postivie Reward: ", positive_reward)
+
         self.reward = positive_reward - negative_reward
 
     def step_2(self, action, state):
         self.reset()
-        # pdb.set_trace()
-        # time = state[2]
         time = state[0]
 
         sun_coverage = float((state[1]) )/ 2.0  # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
@@ -220,7 +221,7 @@ class EnergyEnvironment:
         # print("Grid Energy Produced: ", self.grid_energy)
         # print("Energy Stored in Battery: ", self.battery_energy)
         # print("")
-        # print("Energy Leftover: ", energy_req)
+        # print("Energy Leftover: ", energy_demand - (grid_energy_produced + solar_energy_produced + self.battery_used))
         # print("Next State: ", self.state)
         # print("Reward for step: ", self.reward)
         # print("********************")

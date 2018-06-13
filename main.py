@@ -89,12 +89,12 @@ if __name__ == "__main__":
                 total_grid_energy += env.grid_energy
                 total_battery = env.battery_energy
 
-
-                print(reward)
-                print(action)
-                print("solar energy ", env.solar_energy)
-                print("grid energy", env.grid_energy)
-                print("battery", env.battery_energy)
+                #
+                # print(reward)
+                # print("Action: " , action)
+                # print("solar energy ", env.solar_energy)
+                # print("grid energy", env.grid_energy)
+                # print("battery", env.battery_energy)
 
             reSubList.append(total_solar_energy)
             ffSubList.append(total_grid_energy)
