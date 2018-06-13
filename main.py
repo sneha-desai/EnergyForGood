@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     num_solar_actions = 20
     num_fossil_actions = 20
-    num_wind_actions = 2
+    num_wind_actions = 5
 
     # Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
     Q_x = num_time_states * num_sun_states * num_wind_states
@@ -73,13 +73,12 @@ if __name__ == "__main__":
 
         # Reset the state at the beginning of each "week" in this case 
         env = EnergyEnvironment(s_cap)
+        cur_state = env.state
 
         # Set reward = 0 at the beginning of each episode 
         total_reward = 0
 
         for day in range(num_of_days):
-
-            cur_state = env.state
 
             total_solar_energy = 0
             total_grid_energy = 0
@@ -139,5 +138,5 @@ if __name__ == "__main__":
     energyList.append(windList)
     energyList.append(ffList)
     energyList.append(battList)
-    multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'y'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Renewable Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage"])
+    multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage"])

@@ -69,12 +69,14 @@ class EnergyEnvironment:
         self.state[self.sun_coverage_index] = get_sunlight()
         self.state[self.wind_power_index] = get_wind_power()
 
-    def reward_function(self, solar_energy_called, grid_energy_called, energy_demand, grid_energy_produced, solar_energy_produced, battery_used):
-        output = grid_energy_produced + solar_energy_produced + battery_used
+    def reward_function(self, solar_energy_called, grid_energy_called, wind_energy_called, energy_demand,
+                        grid_energy_produced,solar_energy_produced, wind_energy_produced, battery_used):
+        output = grid_energy_produced + solar_energy_produced + wind_energy_produced + battery_used
         negative_reward = abs(solar_energy_called-solar_energy_produced) + \
                           abs(grid_energy_called-grid_energy_produced) + \
+                          abs(wind_energy_called-wind_energy_produced) + \
                           abs(energy_demand - output)
-        positive_reward = abs(solar_energy_produced)+ abs(battery_used)
+        positive_reward = abs(solar_energy_produced)+ abs(wind_energy_produced) + abs(battery_used)
 
         self.reward = positive_reward - negative_reward
 
@@ -95,23 +97,22 @@ class EnergyEnvironment:
             sun_coverage = 0
 
         energy_demand = self.time_energy_requirement[time]
-        # energy_req = self.time_energy_requirement[time]
 
         solar_energy_called = action[self.solar_index]
         grid_energy_called = action[self.ff_index]
-
-        # if (action[self.wind_index] == 1):
-        # self.wind_energy, self.battery = self.wind_producer.output(energy_req, wind_power)
-        # self.wind_cost = self.wind_producer.production_cost(self.wind_energy)
+        wind_energy_called = action[self.wind_index]
 
         solar_energy_produced = self.solar_producer.output_2(solar_energy_called, sun_coverage)
         self.solar_energy = copy.deepcopy(solar_energy_produced)
 
+        wind_energy_produced = self.wind_producer.output_2(wind_energy_called, wind_power)
+        self.wind_energy = copy.deepcopy(wind_energy_produced)
+
         old_battery = self.battery_energy
 
         # if there is excess energy to store in battery
-        if (self.solar_energy + self.battery_energy) > energy_demand:
-            self.battery_energy += (self.solar_energy + self.battery_energy) - energy_demand
+        if (self.solar_energy + self.wind_energy + self.battery_energy) > energy_demand:
+            self.battery_energy += (self.solar_energy + self.wind_energy + self.battery_energy) - energy_demand
             if (self.battery_energy < old_battery):
                 self.battery_used = old_battery - self.battery_energy
             else:
@@ -125,8 +126,8 @@ class EnergyEnvironment:
         self.grid_energy= copy.deepcopy(grid_energy_produced)
 
         # get the reward
-        self.reward_function(solar_energy_called, grid_energy_called, energy_demand, grid_energy_produced,
-                               solar_energy_produced, self.battery_used)
+        self.reward_function(solar_energy_called, grid_energy_called, wind_energy_called, energy_demand, grid_energy_produced,
+                               solar_energy_produced, wind_energy_produced, self.battery_used)
 
         self.get_next_state(action)
 
