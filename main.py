@@ -1,11 +1,10 @@
 import numpy as np
 import sys
 from setup_environment import EnergyEnvironment
-from utils import *
+import utils 
 from plots import *
-from maps import *
-from weather import *
 from EnergyProducer.solar_by_region_API import *
+from agent import Agent 
 
 #for now let's say location is california always (but maybe eventually will be an argument passed)
 location = 'California'
@@ -14,34 +13,16 @@ if __name__ == "__main__":
         episodes_num = int(sys.argv[1])
     else:
         episodes_num = 1000
+    agent = Agent()
 
     num_of_days = 30        # number of days per episode
-
     num_time_states = 4
-    num_sun_states = 3
-    num_wind_states = 3
 
-    num_solar_actions = 20
-    num_fossil_actions = 20
-    num_wind_actions = 5
-
-    # Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
-    Q_x = num_time_states * num_sun_states * num_wind_states
-
-    Q_y = num_solar_actions * num_solar_actions
-
-
-    Q_x = num_time_states * num_sun_states * num_wind_states
-    Q_y = num_solar_actions * num_wind_actions * num_fossil_actions
-
-    Q = np.zeros([Q_x, Q_y])
+    Q = agent.initialize_Q()
 
     print_iteration = 50
 
-
     #Learning paramenters
-    gamma = 0.95
-    alpha = 0.8
     epsilon = 0.5
 
     # List parameters
@@ -56,10 +37,7 @@ if __name__ == "__main__":
     solarSubList = []
     windSubList = []
     ffSubList = []
-    battSubList = []
-
-    state_map = init_state_map(num_time_states, num_sun_states, num_wind_states)
-    action_map = init_action_map(num_solar_actions, num_wind_actions, num_fossil_actions)
+    battSubList = [] 
 
     print_flag = False
 
@@ -85,20 +63,11 @@ if __name__ == "__main__":
             total_battery = 0
 
             for i in range(num_time_states):
-                cur_state_index = get_state_index(cur_state, state_map)
-
-                action_index = eps_greedy(Q, epsilon, cur_state_index)
-
-                action = action_map[action_index]
-
-                # calculate expected next states
-                expected_value_next_state = calculate_expected_next_state(action, cur_state, state_map, Q)
-
-                #don't use next_state until next iteration of for loop
+                action, cur_state_index, action_index = agent.get_action(cur_state, Q, epsilon)
                 reward, next_state = env.step(action, cur_state)
-
-                Q = q_learning_update(gamma, alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
-
+                Q = agent.get_Q(action, cur_state, Q, epsilon,
+                    cur_state_index, action_index, reward)
+ 
                 cur_state = next_state
                 total_reward += reward
 
