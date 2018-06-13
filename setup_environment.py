@@ -142,6 +142,11 @@ class EnergyEnvironment:
         # time = state[2]
         time = state[0]
 
+        sun_coverage = float((state[1]) )/ 2.0  # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
+
+        if time == 0 or time == 3:
+            sun_coverage = 0
+
         energy_demand = self.time_energy_requirement[time]
         energy_req = self.time_energy_requirement[time]
 
@@ -156,9 +161,8 @@ class EnergyEnvironment:
         #     self.solar_energy, self.battery_energy = self.solar_producer.output(solar_energy_called)
         #     self.battery_energy = self.battery.truncate(self.battery_energy)
 
-        if time == 2:
-            self.solar_energy, self.battery_energy = self.solar_producer.output(solar_energy_called)
-            self.battery_energy = self.battery.truncate(self.battery_energy)
+        self.solar_energy, self.battery_energy = self.solar_producer.output(solar_energy_called, sun_coverage)
+        self.battery_energy = self.battery.truncate(self.battery_energy)
 
         if self.battery_energy > 0:
             # The case if there is more energy stored than demanded in this step
@@ -169,7 +173,7 @@ class EnergyEnvironment:
                 energy_req -= self.battery_energy
                 self.battery_energy = 0.0
 
-        self.grid_energy, throwaway = self.grid_producer.output(grid_energy_called)
+        self.grid_energy, throwaway = self.grid_producer.output(grid_energy_called, 1)
         energy_req -= self.grid_energy
 
 

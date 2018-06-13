@@ -19,8 +19,8 @@ if __name__ == "__main__":
     num_time_states = 4
     num_weather_states = 3
 
-    num_solar_actions = 10
-    num_fossil_actions = 10
+    num_solar_actions = 20
+    num_fossil_actions = 20
 
     # Q_x = num_solar_states * num_fossil_states * num_time_states * num_weather_states
     Q_x = num_time_states * num_weather_states
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     gamma = 0.95
     alpha = 0.8
-    epsilon = 0.4
+    epsilon = 0.5
     rList = []
     reList = []
     ffList = []
@@ -101,7 +101,6 @@ if __name__ == "__main__":
             reSubList.append(total_solar_energy)
             ffSubList.append(total_grid_energy)
             battSubList.append(total_battery)
-        epsilon = max(0, epsilon-0.05)
 
         if print_flag:
             # print_info(itr, env)
@@ -119,6 +118,9 @@ if __name__ == "__main__":
 
         #total reward per episode appended for learning curve visualization
         rList.append(total_reward)
+
+        epsilon = max(0, epsilon-0.0005)
+        print(epsilon)
 
 
     print("Score over time: " + str(sum(rList) / episodes_num))

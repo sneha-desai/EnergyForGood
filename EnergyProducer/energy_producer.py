@@ -13,10 +13,11 @@ class EnergyProducer(object):
         else:
             return self.unit_price*quantity
 
-    def output(self, quantity):
+    def output(self, quantity, sun_coverage):
         energy_produced = min(quantity, self.capacity)
-        if (self.capacity > quantity):
-            energy_leftover = quantity - self.capacity
+        energy_produced = energy_produced*sun_coverage
+        if (self.capacity > energy_produced):
+            energy_leftover = energy_produced - self.capacity
             return energy_produced, energy_leftover
         else:
             return energy_produced, 0
@@ -28,6 +29,6 @@ class EnergyProducer(object):
         self.init_price = val
         return self.init_price
 
-    def truncate(self, amount):
-        amount = max(0, amount)
-        return min(self.capacity, amount)
+    def truncate(self, quantity):
+        quantity = max(0, quantity)
+        return min(self.capacity, quantity)
