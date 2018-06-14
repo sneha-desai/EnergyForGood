@@ -38,6 +38,3 @@ class Agent:
         Q = utils.q_learning_update(self.gamma, self.alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
         return Q
 
-    def get_maps(self):
-        return self.state_map, self.action_map
-
