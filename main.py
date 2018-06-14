@@ -32,14 +32,16 @@ if __name__ == "__main__":
     solarList = []
     windList = []
     ffList = []
-    battList = []
+    battstorageList = []
+    battusedList = []
     energyList = []
 
     # SubList paramenters
     solarSubList = []
     windSubList = []
     ffSubList = []
-    battSubList = [] 
+    battstorageSubList = []
+    battusedSubList = []
 
     print_flag = False
 
@@ -58,9 +60,10 @@ if __name__ == "__main__":
         for day in range(num_of_days):
 
             total_solar_energy = 0
-            total_grid_energy = 0
-            total_battery = 0
             total_wind_energy = 0
+            total_grid_energy = 0
+            total_battery_stored = 0
+            total_battery_used = 0
 
             for i in range(num_time_states):
                 action, cur_state_index, action_index = agent.get_action(cur_state, Q, epsilon)
@@ -70,31 +73,41 @@ if __name__ == "__main__":
                 cur_state = next_state
                 total_reward += reward
 
+                # calculate total
                 total_solar_energy += env.solar_energy
-                total_grid_energy += env.grid_energy
-                total_battery += env.battery_energy
                 total_wind_energy += env.wind_energy
+                total_grid_energy += env.grid_energy
+                total_battery_stored += env.battery_energy
+                total_battery_used += env.battery_used
 
+            # save daily energy use from different sources
             solarSubList.append(total_solar_energy)
-            ffSubList.append(total_grid_energy)
-            battSubList.append(total_battery)
             windSubList.append(total_wind_energy)
+            ffSubList.append(total_grid_energy)
+            battstorageSubList.append(total_battery_stored)
+            battusedSubList.append(total_battery_used)
+
 
         if print_flag:
             # print_info(itr, env)
             solarList.append(np.mean(solarSubList))
             windList.append(np.mean(windSubList))
             ffList.append(np.mean(ffSubList))
-            battList.append(np.mean(battSubList))
+            battstorageList.append(np.mean(battstorageSubList))
+            battusedList.append(np.mean(battusedSubList))
+
             solarSubList = []
             windSubList = []
             ffSubList = []
+            battstorageSubList = []
+            battusedSubList = []
 
         print_flag = False
 
         #total reward per episode appended for learning curve visualization
         rList.append(total_reward)
 
+        #decrease exploration factor by a little bit every episode
         epsilon = max(0, epsilon-0.0005)
         
     print("Score over time: " + str(sum(rList) / episodes_num))
@@ -105,6 +118,8 @@ if __name__ == "__main__":
     energyList.append(solarList)
     energyList.append(windList)
     energyList.append(ffList)
-    energyList.append(battList)
-    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage"])
+    energyList.append(battstorageList)
+    energyList.append(battusedList)
+
+    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'pink'], ylabel="Energy (kWh)",
+                 title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
