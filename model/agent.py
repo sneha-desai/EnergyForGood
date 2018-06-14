@@ -6,27 +6,24 @@ import utils.utils as utils
 
 class Agent: 
     def __init__(self):
-        self.num_states = {
-            "time": 4,
-            "sun": 3,
-            "wind": 3
-        }
-        self.num_actions = {
-            "solar": 20,
-            "fossil": 20,
-            "wind": 5
-        }
+        self.num_time_states = 4
+        self.num_sun_states = 3
+        self.num_wind_states = 3
 
-        self.state_map = maps.init_state_map(list(self.num_states.values()))
-        self.action_map = maps.init_action_map(list(self.num_actions.values()))
+        self.num_solar_actions = 20 
+        self.num_fossil_actions = 20
+        self.num_wind_actions = 5
+
+        self.state_map = maps.init_state_map(self.num_time_states, self.num_sun_states, self.num_wind_states)
+        self.action_map = maps.init_action_map(self.num_solar_actions, self.num_wind_actions, self.num_fossil_actions)
 
         #Learning paramenters
         self.gamma = 0.95 
         self.alpha = 0.8
 
     def initialize_Q(self):
-        Q_x = np.product(list(self.num_states.values()))
-        Q_y = np.product(list(self.num_actions.values()))
+        Q_x = self.num_time_states * self.num_sun_states * self.num_wind_states
+        Q_y = self.num_solar_actions * self.num_wind_actions * self.num_fossil_actions
         Q = np.zeros([Q_x, Q_y])
         return Q
 
@@ -40,3 +37,7 @@ class Agent:
         expected_value_next_state = utils.calculate_expected_next_state(action, cur_state, self.state_map, Q)
         Q = utils.q_learning_update(self.gamma, self.alpha, Q, cur_state_index, action_index, expected_value_next_state, reward)
         return Q
+
+    def get_maps(self):
+        return self.state_map, self.action_map
+

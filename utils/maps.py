@@ -1,7 +1,4 @@
-def init_action_map(array):
-    a = array[0]
-    b = array[1]
-    c = array[2]
+def init_action_map(a, b, c):
     count = 0
     mapping = {}
     for i in range(a):
@@ -11,10 +8,7 @@ def init_action_map(array):
                 count += 1
     return mapping
 
-def init_state_map(array):
-    a = array[0]
-    b = array[1]
-    c = array[2]
+def init_state_map(a, b, c):
     count = 0
     mapping = {}
     for i in range(a):
