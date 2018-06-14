@@ -3,8 +3,6 @@ from data.resources import *
 class EnergyProducer(object):
     def __init__(self, type, s_cap):
         self.type = type
-        #print(type)
-        #print(location)
         self.unit_price = resource_price[type]
         self.init_price = resource_init_price[type]
         self.capacity = resource_capacity_func(type, s_cap)
@@ -14,11 +12,9 @@ class EnergyProducer(object):
 
     def output(self, energy_required, weather):
         if self.type == "solar":
-            # CHANGE!!!!! this should be a formula of amount of energy produced depending on weather
             energy_produced = self.capacity * weather
 
         elif self.type == "wind":
-            # CHANGE!!!!!
             energy_produced = self.capacity * weather
 
         else:
