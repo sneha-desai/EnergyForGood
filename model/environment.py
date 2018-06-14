@@ -39,6 +39,7 @@ class EnergyEnvironment:
         self.solar_index = 0
         self.wind_index = 1
         self.ff_index = 2
+
         self.time_index = 0
         self.sun_coverage_index = 1
         self.wind_power_index = 2
@@ -62,7 +63,7 @@ class EnergyEnvironment:
         # reward
         self.reward = 0
 
-    def get_next_state(self, action):
+    def get_next_state(self):
         self.state[self.time_index] = (self.state[self.time_index] + 1) % 4
         self.state[self.sun_coverage_index] = weather.get_sunlight()
         self.state[self.wind_power_index] = weather.get_wind_power()
@@ -70,24 +71,24 @@ class EnergyEnvironment:
     def reward_function(self, solar_energy_called, grid_energy_called, wind_energy_called, energy_demand,
                         grid_energy_produced,solar_energy_produced, wind_energy_produced, battery_used):
         output = grid_energy_produced + solar_energy_produced + wind_energy_produced + battery_used
-        negative_reward = abs(solar_energy_called-solar_energy_produced) + \
-                          abs(grid_energy_called-grid_energy_produced) + \
-                          abs(wind_energy_called-wind_energy_produced) + \
+        negative_reward = abs(solar_energy_called - solar_energy_produced) + \
+                          abs(grid_energy_called - grid_energy_produced) + \
+                          abs(wind_energy_called - wind_energy_produced) + \
                           abs(energy_demand - output)
-        positive_reward = abs(solar_energy_produced)+ abs(wind_energy_produced) + abs(battery_used)
+        positive_reward = abs(solar_energy_produced) + abs(wind_energy_produced) + abs(battery_used)
 
         self.reward = positive_reward - negative_reward
 
     def step(self, action, state):
         self.reset()
 
-        #penalizes reward because of initial cost of solar panels
+        # penalizes reward because of initial cost of solar panels
         # self.reward -= self.solar_producer.get_init_price()/30
         # self.solar_producer.set_init_price(0)
 
         time = state[self.time_index]
 
-        sun_coverage = float((state[self.sun_coverage_index]) )/ 2.0  # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
+        sun_coverage = float((state[self.sun_coverage_index])) / 2.0  # the 2 divisor makes the sun_coverage an actual sun proportion instead of an integer
         wind_power = float(state[self.wind_power_index]) / 2.0
 
         # no sun during the 1st and last time periods
@@ -110,16 +111,16 @@ class EnergyEnvironment:
 
         # if there is excess energy to store in battery
         if (self.solar_energy + self.wind_energy + self.battery_energy) > energy_demand:
-            self.battery_energy += (self.solar_energy + self.wind_energy + self.battery_energy) - energy_demand
+            self.battery_energy = (self.solar_energy + self.wind_energy + self.battery_energy) - energy_demand
             if (self.battery_energy < old_battery):
                 self.battery_used = old_battery - self.battery_energy
             else:
                 self.battery_used = 0
 
-        #make sure battery energy isn't greater than amount of energy it can store
+        # make sure battery energy isn't greater than amount of energy it can store
         self.battery_energy = self.battery.truncate(self.battery_energy)
 
-        #calculate grid energy produced from gril energy call
+        # calculate grid energy produced from grid energy call
         grid_energy_produced = self.grid_producer.output_2(grid_energy_called, 1)
         self.grid_energy= copy.deepcopy(grid_energy_produced)
 
@@ -127,7 +128,7 @@ class EnergyEnvironment:
         self.reward_function(solar_energy_called, grid_energy_called, wind_energy_called, energy_demand, grid_energy_produced,
                                solar_energy_produced, wind_energy_produced, self.battery_used)
 
-        self.get_next_state(action)
+        self.get_next_state()
 
         return self.reward, self.state
 
