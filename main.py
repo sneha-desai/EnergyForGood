@@ -84,10 +84,12 @@ if __name__ == "__main__":
                 total_solar_energy += env.solar_energy
                 total_wind_energy += env.wind_energy
                 total_grid_energy += env.grid_energy
-                total_battery_stored += env.battery_energy
+                # total_battery_stored += env.battery_energy
                 total_battery_used += env.battery_used
 
             # save daily energy use from different sources
+            total_battery_stored = env.battery_energy
+
             solarSubList.append(total_solar_energy)
             windSubList.append(total_wind_energy)
             ffSubList.append(total_grid_energy)
