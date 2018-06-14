@@ -7,6 +7,8 @@ import utils.maps as maps
 from model.environment import EnergyEnvironment
 from data.solar_by_region_API import api_call
 from model.agent import Agent
+import matplotlib.pyplot as plt
+
 
 #for now let's say location is california always (but maybe eventually will be an argument passed)
 location = 'California'
@@ -47,6 +49,11 @@ if __name__ == "__main__":
 
     s_cap = api_call(location) #solar energy from api
 
+    # for realtime plotting
+    fig, ax = plt.subplots()
+    ax.set_ylabel("Energy (kWh)")
+    ax.set_title("Evolution of Energy Use")
+
     for itr in range(episodes_num):
 
         # Printing results every 50 episodes
@@ -56,6 +63,7 @@ if __name__ == "__main__":
         env = EnergyEnvironment(s_cap)
         cur_state = env.state
         total_reward = 0
+
 
         for day in range(num_of_days):
 
@@ -96,6 +104,13 @@ if __name__ == "__main__":
             battstorageList.append(np.mean(battstorageSubList))
             battusedList.append(np.mean(battusedSubList))
 
+            plt.ion()
+            plots.real_time_plot([[np.mean(solarSubList)], [np.mean(windSubList)], [np.mean(ffSubList)],
+                                            [np.mean(battstorageSubList)], [np.mean(battusedSubList)]],
+                                 colors=['b', 'g', 'r', 'purple', 'pink'],
+                                 legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
+                                          "Battery Usage"], ax=ax)
+
             solarSubList = []
             windSubList = []
             ffSubList = []
@@ -109,7 +124,8 @@ if __name__ == "__main__":
 
         #decrease exploration factor by a little bit every episode
         epsilon = max(0, epsilon-0.0005)
-        
+
+    plt.close()
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
 
@@ -120,6 +136,7 @@ if __name__ == "__main__":
     energyList.append(ffList)
     energyList.append(battstorageList)
     energyList.append(battusedList)
+
 
     plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'pink'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
