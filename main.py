@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     print_iteration = 50
 
-    #Learning paramenters
+    # Learning paramenters
     epsilon = 0.5
 
     # List parameters
