@@ -86,20 +86,21 @@ def smooth_list(x):
     return avg_x
 
 
-def print_info(itr, env):
+def print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg):
     print("*************************")
     print("Iteration : " + str(itr))
-    print("Renewable Energy:" + str(env.solar_energy))
-    print("Fossil Fuel Energy: " + str(env.grid_energy))
-    print("Renewable Energy Cost: " + str(env.solar_cost))
-    print("Fossil Fuel Cost: " + str(env.grid_cost))
-    print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
-    if (env.solar_energy + env.grid_energy) > 0:
-        print("Percentage of Renewable : " + str(
-            (float(env.solar_energy) / (env.solar_energy + env.grid_energy)) * 100))
+    print("Average Daily Energy Demand: " + str(round(np.mean(env.time_energy_requirement),2)))
+    print("Average Daily Solar Energy Produced:" + str(round(solar_avg, 2)))
+    print("Average Daily Wind Energy Produced: " + str(round(wind_avg, 2)))
+    print("Average Daily Fossil Fuel Energy Produced: " + str(round(ff_avg, 2)))
+    print("Average Daily Battery Used Produced: " + str(round(batt_used_avg, 2)))
+    print("Daily Energy Stored in Battery Produced: " + str(round(batt_storage_avg, 2)))
+    if (solar_avg + wind_avg + batt_used_avg + ff_avg) > 0:
+        print("Percentage of Renewable Energy Produced Produced: " + str(
+            round(((float(solar_avg + wind_avg + batt_used_avg) / (solar_avg + wind_avg + batt_used_avg + ff_avg)) * 100),2)))
     else:
         print("NO ENERGY PRODUCED")
-    if (env.time_energy_requirement[3] <= (env.solar_energy + env.grid_energy)):
+    if (np.mean(env.time_energy_requirement) <= (solar_avg + wind_avg + batt_used_avg + ff_avg)):
         print("Energy Requirement Met: YES")
     else:
         print(("Energy Requirement Met: NO"))

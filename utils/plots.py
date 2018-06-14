@@ -37,7 +37,7 @@ def plot_learning_curve(rList):
 
 def real_time_plot(y, colors, legends, ax):
     ax.cla()
-    ax.set_ylim(0,30)
+    ax.set_ylim(0,40)
     N = 1
     ind = np.arange(N)
     width = 1.0 / (5 + 1)
