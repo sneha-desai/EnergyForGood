@@ -130,6 +130,9 @@ class EnergyEnvironment:
 
         self.get_next_state()
 
+        if(self.battery_energy > 20):
+            print("greater than 20")
+
         return self.reward, self.state
 
 
