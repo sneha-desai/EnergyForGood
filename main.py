@@ -60,6 +60,7 @@ if __name__ == "__main__":
             total_solar_energy = 0
             total_grid_energy = 0
             total_battery = 0
+            total_wind_energy = 0
 
             for i in range(num_time_states):
                 action, cur_state_index, action_index = agent.get_action(cur_state, Q, epsilon)
@@ -73,7 +74,7 @@ if __name__ == "__main__":
                 total_solar_energy += env.solar_energy
                 total_grid_energy += env.grid_energy
                 total_battery = env.battery_energy
-                total_wind_energy = env.wind_energy
+                total_wind_energy += env.wind_energy
 
             solarSubList.append(total_solar_energy)
             ffSubList.append(total_grid_energy)
