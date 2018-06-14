@@ -58,6 +58,16 @@ resource_init_price = {
     "battery": 3000
 }
 
+def get_data(location, panels):
+    solar_dict = api_call(location) #solar energy from api
+    #print(solar_dict)
+    for key, value in solar_dict.items():
+        solar_dict[key] = value*0.15*(panels*1.6)
+    # s_cap_monthly = solar_dict[months[itr%12]]*0.15*(panels*1.6))
+    print(solar_dict)
+    return solar_dict
+
+
 
 ## This file is modeled as if the weather information could be grabbed from a dataset with weather data over time
 ## or such that the weather data is grabbed from a weather API

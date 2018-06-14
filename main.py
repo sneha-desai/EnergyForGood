@@ -45,7 +45,7 @@ if __name__ == "__main__":
     print_flag = False
 
     #solar information
-    location = 'California' #for now let's say location is california always (but maybe eventually will be an argument passed)
+    location = 'Delaware' #for now let's say location is california always (but maybe eventually will be an argument passed)
     months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
     s_cap, solar_dict = api_call(location) #solar energy from api
     panels = 30 # so this number is set for now but can be made modular later
