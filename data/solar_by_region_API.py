@@ -7,6 +7,6 @@ def api_call(location):
     #solar energy in kWh/m2/day area 
     solar_response = requests.get("https://developer.nrel.gov/api/solar/solar_resource/v1.json?api_key=owCXDO0Dkwp5tddJBWWCfSEVKxR3NpSHbtxYOuGu&address={}" .format(location))
     solar_list = json.loads(solar_response.content)
-    return int(solar_list['outputs']['avg_dni']['annual'])
+    return int(solar_list['outputs']['avg_lat_tilt']['annual']), solar_list['outputs']['avg_lat_tilt']['monthly']
 
 #print(api_call("Delaware"))

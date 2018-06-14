@@ -8,8 +8,7 @@ from model.environment import EnergyEnvironment
 from data.solar_by_region_API import api_call
 from model.agent import Agent
 
-#for now let's say location is california always (but maybe eventually will be an argument passed)
-location = 'California'
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
@@ -45,13 +44,21 @@ if __name__ == "__main__":
 
     print_flag = False
 
-    s_cap = api_call(location) #solar energy from api
+    #solar information
+    location = 'California' #for now let's say location is california always (but maybe eventually will be an argument passed)
+    months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+    s_cap, solar_dict = api_call(location) #solar energy from api
+    panels = 30 # so this number is set for now but can be made modular later
+                # it's the number of 250-watts panels -- will determine multiplier
 
     for itr in range(episodes_num):
 
         # Printing results every 50 episodes
         if itr%print_iteration == 0:
             print_flag = True
+ 
+        s_cap = int(solar_dict[months[itr%12]]*0.15*(panels*1.6))
+        #print(s_cap)
 
         env = EnergyEnvironment(s_cap)
         cur_state = env.state
