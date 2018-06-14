@@ -71,8 +71,7 @@ if __name__ == "__main__":
             for i in range(num_time_states):
                 action, cur_state_index, action_index = agent.get_action(cur_state, Q, epsilon)
                 reward, next_state = env.step(action, cur_state)
-                Q = agent.get_Q(action, cur_state, Q, epsilon,
-                    cur_state_index, action_index, reward)
+                Q = agent.get_Q(action, cur_state, Q, epsilon, cur_state_index, action_index, reward)
  
                 cur_state = next_state
                 total_reward += reward
