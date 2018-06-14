@@ -1,5 +1,4 @@
-from EnergyProducer.resources import * #resource_capacity, resource_price, resource_init_price
-
+from data.resources import *
 
 class EnergyProducer(object):
     def __init__(self, type, s_cap):
@@ -8,7 +7,7 @@ class EnergyProducer(object):
         #print(location)
         self.unit_price = resource_price[type]
         self.init_price = resource_init_price[type]
-        self.capacity = resource_capacity(type, s_cap)
+        self.capacity = resource_capacity_func(type, s_cap)
 
     def production_cost(self, quantity):
         return self.unit_price * quantity
