@@ -33,7 +33,7 @@ resource_capacity = {
 
 def resource_capacity_func(thetype, s_cap):
     if thetype == "solar": return s_cap # return api_call(location)
-    elif thetype == "wind": return s_cap
+    elif thetype == "wind": return 0.45
     elif thetype == "fossil fuel": return 100000
     elif thetype == "battery": return 20
 

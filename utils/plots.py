@@ -35,4 +35,21 @@ def plot_learning_curve(rList):
     plt.close()
 
 
+def real_time_plot(y, colors, legends, ax):
+    ax.cla()
+    ax.set_ylim(0,30)
+    N = 1
+    ind = np.arange(N)
+    width = 1.0 / (5 + 1)
+    rects = []
+
+    for i in range(len(y)):
+        rects.append(ax.bar(ind + width * i, y[i], width, color=colors[i]))
+
+    ax.legend((rects[0][0], rects[1][0], rects[2][0], rects[3][0], rects[4][0]), legends)
+    plt.show(False)
+    plt.pause(0.00001)
+
+
+
 

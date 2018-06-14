@@ -46,6 +46,10 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
 #     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
 # =======
 
+    prob_windy = 0.5
+    prob_part_windy = 0.4
+    prob_not_windy = 0.1
+
     # not windy (20%)
     expected_next_state[0] = [(cur_state[0]+1)%4, 0, 0] #cloudy (20% chance)
     expected_next_state[1] = [(cur_state[0]+1)%4, 1, 0] #partially cloudy (20% chance)
@@ -68,9 +72,9 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
         # this was originally 'i' but shouldn't it be j???
         max_q_values.append(np.max(q_vals[expected_next_state_array_indices[j], :]))
 
-    expected_value_next_state = 0.2 * 0.2 * max_q_values[0] + 0.2 * 0.2 * max_q_values[1] + 0.6 * 0.2 * max_q_values[2] + \
-                                0.2 * 0.5 * max_q_values[3] + 0.2 * 0.5 * max_q_values[4] + 0.6 * 0.5 * max_q_values[5] + \
-                                0.2 * 0.3 * max_q_values[6] + 0.2 * 0.3 * max_q_values[7] + 0.6 * 0.3 * max_q_values[8]
+    expected_value_next_state = 0.2 * prob_not_windy * max_q_values[0] + 0.2 * prob_not_windy * max_q_values[1] + 0.6 * prob_not_windy * max_q_values[2] + \
+                                0.2 * prob_part_windy * max_q_values[3] + 0.2 * prob_part_windy * max_q_values[4] + 0.6 * prob_part_windy * max_q_values[5] + \
+                                0.2 * prob_windy * max_q_values[6] + 0.2 * prob_windy * max_q_values[7] + 0.6 * prob_windy * max_q_values[8]
     return expected_value_next_state
 
 
