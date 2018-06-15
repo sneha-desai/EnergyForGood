@@ -1,7 +1,7 @@
 import requests
 import json
 
-def api_call(location):
+def solar_api_call(location):
     #input a US state for location and gives average (right now taking annual average but can be changed to monthly)
     #solar energy in kWh/m2/day area 
     solar_response = requests.get("https://developer.nrel.gov/api/solar/solar_resource/v1.json?api_key=owCXDO0Dkwp5tddJBWWCfSEVKxR3NpSHbtxYOuGu&address={}" .format(location))
@@ -12,5 +12,10 @@ def api_call(location):
         solar_dict.append(value)
     return solar_dict
 
+def wind_api_call(location):
+    if(location == 'California'):
+        return [0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.4, 0.4]
+    else:
+        return [0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.4, 0.4]
 
 # print(api_call("Delaware"))

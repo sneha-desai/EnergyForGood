@@ -1,4 +1,4 @@
-from data.solar_by_region_API import api_call
+from data.regional_resources import solar_api_call, wind_api_call
 
 class House: 
     def __init__(self, location, num_of_panels, num_of_turbines, num_of_batteries):
@@ -6,8 +6,8 @@ class House:
         self.num_of_turbines = num_of_turbines
 
         self.constant_caps = {
-            "solar": api_call(location),  # Note this is an array
-            "wind": [0.4, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.4, 0.4, 0.4, 0.4],
+            "solar": solar_api_call(location),  # Note this is an array
+            "wind": wind_api_call(location),
             "fossil fuel": 100000, 
             "battery": 10 
         }
