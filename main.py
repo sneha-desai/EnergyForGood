@@ -1,34 +1,44 @@
 import numpy as np
 import sys
 
+# import data.resources as capacities
 import utils.utils as utils
 import utils.plots as plots 
 import utils.maps as maps
 from model.environment import EnergyEnvironment
-from data.solar_by_region_API import api_call
 from model.agent import Agent
+from model.house import House
+
 import matplotlib.pyplot as plt
 
 
 
 if __name__ == "__main__":
+    # Get arguments 
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
-        episodes_num = 1000
-    agent = Agent()
+        episodes_num = 1001
 
+    # House dependent parameters
+    location = 'California' 
+    num_of_panels = 30 # Number of 250-watts solar panels
+    num_of_batteries = 2
+    house = House('California', 30, 2)
+
+    # Main dependent parameters
     num_of_days = 30        # number of days per episode
     num_time_states = 4
-
-    Q = agent.initialize_Q()
-
-    print_iteration = 50
-
-    # Learning paramenters
     epsilon = 0.5
 
-    # List parameters
+    # Initiate Agent
+    agent = Agent()
+    Q = agent.initialize_Q()
+
+    # For printing and plots
+    print_iteration = 50
+    print_flag = False
+
     rList = []
     solarList = []
     windList = []
@@ -37,43 +47,34 @@ if __name__ == "__main__":
     battusedList = []
     energyList = []
 
-    # SubList paramenters
     solarSubList = []
     windSubList = []
     ffSubList = []
     battstorageSubList = []
     battusedSubList = []
 
-    print_flag = False
-
-    #solar information
-    location = 'Delaware' #for now let's say location is california always (but maybe eventually will be an argument passed)
-    months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
-    s_cap, solar_dict = api_call(location) #solar energy from api
-    panels = 30 # so this number is set for now but can be made modular later
-                # it's the number of 250-watts panels -- will determine multiplier
-
-    # for realtime plotting
-    fig, ax = plt.subplots()
-    ax.set_ylabel("Energy (kWh)")
-    ax.set_title("Evolution of Energy Use")
+    ## for realtime plotting
+    # fig, ax = plt.subplots()
+    # ax.set_ylabel("Energy (kWh)")
+    # ax.set_title("Evolution of Energy Use")
 
     for itr in range(episodes_num):
-
-        # Printing results every 50 episodes
         if itr%print_iteration == 0:
             print_flag = True
  
-        s_cap = int(solar_dict[months[itr%12]]*0.15*(panels*1.6))
-        #print(s_cap)
-
-        env = EnergyEnvironment(s_cap)
+        # The house stays constant for every episode
+        env = EnergyEnvironment(house) 
         cur_state = env.state
         total_reward = 0
 
+        solar_avg = 0
+        wind_avg = 0
+        ff_avg = 0
+        batt_storage_avg = 0
+        batt_used_avg = 0
+
 
         for day in range(num_of_days):
-
             total_solar_energy = 0
             total_wind_energy = 0
             total_grid_energy = 0
@@ -98,27 +99,34 @@ if __name__ == "__main__":
             # save daily energy use from different sources
             total_battery_stored = env.battery_energy
 
+            # save total daily energy produced from different sources
             solarSubList.append(total_solar_energy)
             windSubList.append(total_wind_energy)
             ffSubList.append(total_grid_energy)
             battstorageSubList.append(total_battery_stored)
             battusedSubList.append(total_battery_used)
 
+            solar_avg = np.mean(solarSubList)
+            wind_avg = np.mean(windSubList)
+            ff_avg = np.mean(ffSubList)
+            batt_storage_avg = np.mean(battstorageSubList)
+            batt_used_avg = np.mean(battusedSubList)
+
 
         if print_flag:
-            # print_info(itr, env)
-            solarList.append(np.mean(solarSubList))
-            windList.append(np.mean(windSubList))
-            ffList.append(np.mean(ffSubList))
-            battstorageList.append(np.mean(battstorageSubList))
-            battusedList.append(np.mean(battusedSubList))
+            utils.print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg)
+            solarList.append(solar_avg)
+            windList.append(wind_avg)
+            ffList.append(ff_avg)
+            battstorageList.append(batt_storage_avg)
+            battusedList.append(np.mean(batt_used_avg))
 
-            plt.ion()
-            plots.real_time_plot([[np.mean(solarSubList)], [np.mean(windSubList)], [np.mean(ffSubList)],
-                                            [np.mean(battstorageSubList)], [np.mean(battusedSubList)]],
-                                 colors=['b', 'g', 'r', 'purple', 'pink'],
-                                 legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
-                                          "Battery Usage"], ax=ax)
+            # plt.ion()
+            # plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
+            #                                 [batt_storage_avg], [batt_used_avg]],
+            #                      colors=['b', 'g', 'r', 'purple', 'gray'],
+            #                      legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
+            #                               "Battery Usage"], ax=ax)
 
             solarSubList = []
             windSubList = []
@@ -134,7 +142,7 @@ if __name__ == "__main__":
         #decrease exploration factor by a little bit every episode
         epsilon = max(0, epsilon-0.0005)
 
-    plt.close()
+    # plt.close()
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
 
@@ -147,5 +155,5 @@ if __name__ == "__main__":
     energyList.append(battusedList)
 
 
-    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'pink'], ylabel="Energy (kWh)",
+    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
