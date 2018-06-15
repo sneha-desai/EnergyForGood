@@ -14,6 +14,9 @@ class Agent:
         self.num_fossil_actions = 20
         self.num_wind_actions = 5
 
+        self.Q_x = self.num_time_states * self.num_sun_states * self.num_wind_states
+        self.Q_y = self.num_solar_actions * self.num_wind_actions * self.num_fossil_actions
+
         self.state_map = maps.init_state_map(self.num_time_states, self.num_sun_states, self.num_wind_states)
         self.action_map = maps.init_action_map(self.num_solar_actions, self.num_wind_actions, self.num_fossil_actions)
 
@@ -22,14 +25,11 @@ class Agent:
         self.alpha = 0.8
 
     def initialize_Q(self):
-        Q_x = self.num_time_states * self.num_sun_states * self.num_wind_states
-        Q_y = self.num_solar_actions * self.num_wind_actions * self.num_fossil_actions
-        Q = np.zeros([Q_x, Q_y])
-        return Q
+        return np.zeros([self.Q_x, self.Q_y])
 
     def get_action(self, cur_state, Q, epsilon):
         cur_state_index = maps.get_state_index(cur_state, self.state_map)
-        action_index = utils.eps_greedy(Q, epsilon, cur_state_index)
+        action_index = utils.eps_greedy(Q, epsilon, cur_state_index, self.Q_y - 1)
         action = self.action_map[action_index]
         return action, cur_state_index, action_index
 

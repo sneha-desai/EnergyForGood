@@ -3,32 +3,34 @@ import math
 import copy
 
 import data.weather as weather
-from model.producer import EnergyProducer
+# import data.resources as capacities
+from model.producer import EnergyProducer 
 
 class EnergyEnvironment:
-    def __init__(self, s_cap):
+    def __init__(self, house): 
         self.time_energy_requirement = [
             7.0,
             8.0,
             6.0,
             7.0
-        ]
+        ] 
+        self.capacities = house.get_caps()
         # solar
-        self.solar_producer = EnergyProducer('solar', s_cap)
+        self.solar_producer = EnergyProducer('solar', self.capacities["solar"]) #array
         self.solar_cost = 0
         self.solar_energy = 0 
 
         # wind
-        self.wind_producer = EnergyProducer('wind', s_cap)
+        self.wind_producer = EnergyProducer('wind', self.capacities["wind"]) #integer
         self.wind_cost = 0
         self.wind_energy = 0
 
         # grid
-        self.grid_producer = EnergyProducer('fossil fuel', s_cap)
+        self.grid_producer = EnergyProducer('fossil fuel', self.capacities["fossil fuel"]) #integer
         self.grid_cost = 0
-        self.grid_energy = 0 # how much energy has been produced from fossil fuel
+        self.grid_energy = 0 
 
-        self.battery = EnergyProducer('battery', s_cap)
+        self.battery = EnergyProducer('battery', self.capacities["battery"]) #integer
         self.battery_energy = 0
         self.battery_used = 0
 
@@ -101,10 +103,10 @@ class EnergyEnvironment:
         grid_energy_called = action[self.ff_index]
         wind_energy_called = action[self.wind_index]
 
-        solar_energy_produced = self.solar_producer.output_2(solar_energy_called, sun_coverage)
+        solar_energy_produced = self.solar_producer.output(solar_energy_called, sun_coverage)
         self.solar_energy = copy.deepcopy(solar_energy_produced)
 
-        wind_energy_produced = self.wind_producer.output_2(wind_energy_called, wind_power)
+        wind_energy_produced = self.wind_producer.output(wind_energy_called, wind_power)
         self.wind_energy = copy.deepcopy(wind_energy_produced)
 
         old_battery = self.battery_energy
@@ -121,7 +123,7 @@ class EnergyEnvironment:
         self.battery_energy = self.battery.truncate(self.battery_energy)
 
         # calculate grid energy produced from grid energy call
-        grid_energy_produced = self.grid_producer.output_2(grid_energy_called, 1)
+        grid_energy_produced = self.grid_producer.output(grid_energy_called, 1)
         self.grid_energy= copy.deepcopy(grid_energy_produced)
 
         # get the reward

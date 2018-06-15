@@ -1,34 +1,44 @@
 import numpy as np
 import sys
 
+# import data.resources as capacities
 import utils.utils as utils
 import utils.plots as plots 
 import utils.maps as maps
 from model.environment import EnergyEnvironment
-from data.solar_by_region_API import api_call
 from model.agent import Agent
+from model.house import House
+
 import matplotlib.pyplot as plt
 
 
 
 if __name__ == "__main__":
+    # Get arguments 
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
         episodes_num = 1000
-    agent = Agent()
 
+    # House dependent parameters
+    location = 'California' 
+    num_of_panels = 30 # Number of 250-watts solar panels
+    num_of_batteries = 2
+    house = House('California', 30, 2)
+
+    # Main dependent parameters
     num_of_days = 30        # number of days per episode
     num_time_states = 4
-
-    Q = agent.initialize_Q()
-
-    print_iteration = 100
-
-    # Learning paramenters
     epsilon = 0.5
 
-    # List parameters
+    # Initiate Agent
+    agent = Agent()
+    Q = agent.initialize_Q()
+
+    # For printing and plots
+    print_iteration = 50
+    print_flag = False
+
     rList = []
     solarList = []
     windList = []
@@ -37,37 +47,18 @@ if __name__ == "__main__":
     battusedList = []
     energyList = []
 
-    # SubList paramenters
     solarSubList = []
     windSubList = []
     ffSubList = []
     battstorageSubList = []
     battusedSubList = []
 
-    print_flag = False
-
-    #solar information
-    location = 'California' #for now let's say location is california always (but maybe eventually will be an argument passed)
-    months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
-    s_cap, solar_dict = api_call(location) #solar energy from api
-    panels = 30 # so this number is set for now but can be made modular later
-                # it's the number of 250-watts panels -- will determine multiplier
-
-    # for realtime plotting
-    # fig, ax = plt.subplots()
-    # ax.set_ylabel("Energy (kWh)")
-    # ax.set_title("Evolution of Energy Use")
-
     for itr in range(episodes_num):
-
-        # Printing results every 50 episodes
         if itr%print_iteration == 0:
             print_flag = True
  
-        s_cap = int(solar_dict[months[itr%12]]*0.15*(panels*1.6))
-        #print(s_cap)
-
-        env = EnergyEnvironment(s_cap)
+        # The house stays constant for every episode
+        env = EnergyEnvironment(house) 
         cur_state = env.state
         total_reward = 0
 
@@ -79,7 +70,6 @@ if __name__ == "__main__":
 
 
         for day in range(num_of_days):
-
             total_solar_energy = 0
             total_wind_energy = 0
             total_grid_energy = 0
