@@ -20,7 +20,7 @@ class Agent:
         self.state_map = maps.init_state_map(self.num_time_states, self.num_sun_states, self.num_wind_states)
         self.action_map = maps.init_action_map(self.num_solar_actions, self.num_wind_actions, self.num_fossil_actions)
 
-        #Learning paramenters
+        # Learning paramenters
         self.gamma = 0.95 
         self.alpha = 0.8
 

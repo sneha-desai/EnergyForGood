@@ -22,9 +22,10 @@ if __name__ == "__main__":
 
     # House dependent parameters
     location = 'California' 
-    num_of_panels = 30 # Number of 250-watts solar panels
+    num_of_panels = 30   # Number of 250-watts solar panels
+    num_of_turbines = 2  # Number of 400 KW wind turbines
     num_of_batteries = 2
-    house = House('California', 30, 2)
+    house = House('California', num_of_panels, num_of_turbines, num_of_batteries)
 
     # Main dependent parameters
     num_of_days = 30        # number of days per episode
@@ -54,9 +55,9 @@ if __name__ == "__main__":
     battusedSubList = []
 
     ## for realtime plotting
-    # fig, ax = plt.subplots()
-    # ax.set_ylabel("Energy (kWh)")
-    # ax.set_title("Evolution of Energy Use")
+    fig, ax = plt.subplots()
+    ax.set_ylabel("Energy (kWh)")
+    ax.set_title("Evolution of Energy Use")
 
     for itr in range(episodes_num):
         if itr%print_iteration == 0:
@@ -121,12 +122,12 @@ if __name__ == "__main__":
             battstorageList.append(batt_storage_avg)
             battusedList.append(np.mean(batt_used_avg))
 
-            # plt.ion()
-            # plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
-            #                                 [batt_storage_avg], [batt_used_avg]],
-            #                      colors=['b', 'g', 'r', 'purple', 'gray'],
-            #                      legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
-            #                               "Battery Usage"], ax=ax)
+            plt.ion()
+            plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
+                                           [batt_storage_avg], [batt_used_avg]],
+                                colors=['b', 'g', 'r', 'purple', 'gray'],
+                                legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
+                                         "Battery Usage"], ax=ax)
 
             solarSubList = []
             windSubList = []
@@ -142,7 +143,7 @@ if __name__ == "__main__":
         #decrease exploration factor by a little bit every episode
         epsilon = max(0, epsilon-0.0005)
 
-    # plt.close()
+    plt.close()
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
 
