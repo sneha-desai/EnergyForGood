@@ -3,32 +3,34 @@ import math
 import copy
 
 import data.weather as weather
-from model.producer import EnergyProducer
+# import data.resources as capacities
+from model.producer import EnergyProducer 
 
 class EnergyEnvironment:
-    def __init__(self, s_cap):
+    def __init__(self, house): 
         self.time_energy_requirement = [
             7.0,
             8.0,
             6.0,
             7.0
-        ]
+        ] 
+        self.capacities = house.get_caps()
         # solar
-        self.solar_producer = EnergyProducer('solar', s_cap)
+        self.solar_producer = EnergyProducer('solar', self.capacities["solar"]) #array
         self.solar_cost = 0
         self.solar_energy = 0 
 
         # wind
-        self.wind_producer = EnergyProducer('wind', s_cap)
+        self.wind_producer = EnergyProducer('wind', self.capacities["wind"]) #integer
         self.wind_cost = 0
         self.wind_energy = 0
 
         # grid
-        self.grid_producer = EnergyProducer('fossil fuel', s_cap)
+        self.grid_producer = EnergyProducer('fossil fuel', self.capacities["fossil fuel"]) #integer
         self.grid_cost = 0
-        self.grid_energy = 0 # how much energy has been produced from fossil fuel
+        self.grid_energy = 0 
 
-        self.battery = EnergyProducer('battery', s_cap)
+        self.battery = EnergyProducer('battery', self.capacities["battery"]) #integer
         self.battery_energy = 0
         self.battery_used = 0
 
