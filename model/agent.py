@@ -12,7 +12,7 @@ class Agent:
 
         self.num_solar_actions = 20 
         self.num_fossil_actions = 20
-        self.num_wind_actions = 5
+        self.num_wind_actions = 6
 
         self.Q_x = self.num_time_states * self.num_sun_states * self.num_wind_states
         self.Q_y = self.num_solar_actions * self.num_wind_actions * self.num_fossil_actions

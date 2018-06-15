@@ -5,7 +5,7 @@ class House:
         self.num_of_panels = num_of_panels
         self.constant_caps = {
             "solar": api_call(location), # Note this is an array
-            "wind": 0.45,
+            "wind": 0.5,
             "fossil fuel": 100000, 
             "battery": 10 
         }

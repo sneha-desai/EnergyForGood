@@ -101,7 +101,7 @@ class EnergyEnvironment:
 
         solar_energy_called = action[self.solar_index]
         grid_energy_called = action[self.ff_index]
-        wind_energy_called = action[self.wind_index]
+        wind_energy_called = action[self.wind_index] * 0.1      # 0 -> 0, 1 -> 0.1, 2 -> 0.2, etc
 
         solar_energy_produced = self.solar_producer.output(solar_energy_called, sun_coverage)
         self.solar_energy = copy.deepcopy(solar_energy_produced)
@@ -131,9 +131,6 @@ class EnergyEnvironment:
                                solar_energy_produced, wind_energy_produced, self.battery_used)
 
         self.get_next_state()
-
-        if(self.battery_energy > 20):
-            print("greater than 20")
 
         return self.reward, self.state
 
