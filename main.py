@@ -54,8 +54,8 @@ if __name__ == "__main__":
     battusedSubList = []
 
     for itr in range(episodes_num):
-        # if itr%print_iteration == 0:
-        #     print_flag = True
+        if itr%print_iteration == 0:
+            print_flag = True
  
         # The house stays constant for every episode
         env = EnergyEnvironment(house) 
