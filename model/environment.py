@@ -103,10 +103,10 @@ class EnergyEnvironment:
         grid_energy_called = action[self.ff_index]
         wind_energy_called = action[self.wind_index]
 
-        solar_energy_produced = self.solar_producer.output_2(solar_energy_called, sun_coverage)
+        solar_energy_produced = self.solar_producer.output(solar_energy_called, sun_coverage)
         self.solar_energy = copy.deepcopy(solar_energy_produced)
 
-        wind_energy_produced = self.wind_producer.output_2(wind_energy_called, wind_power)
+        wind_energy_produced = self.wind_producer.output(wind_energy_called, wind_power)
         self.wind_energy = copy.deepcopy(wind_energy_produced)
 
         old_battery = self.battery_energy
@@ -123,7 +123,7 @@ class EnergyEnvironment:
         self.battery_energy = self.battery.truncate(self.battery_energy)
 
         # calculate grid energy produced from grid energy call
-        grid_energy_produced = self.grid_producer.output_2(grid_energy_called, 1)
+        grid_energy_produced = self.grid_producer.output(grid_energy_called, 1)
         self.grid_energy= copy.deepcopy(grid_energy_produced)
 
         # get the reward
