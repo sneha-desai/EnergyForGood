@@ -46,6 +46,10 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
 #     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
 # =======
 
+    prob_windy = 0.5
+    prob_part_windy = 0.4
+    prob_not_windy = 0.1
+
     # not windy (20%)
     expected_next_state[0] = [(cur_state[0]+1)%4, 0, 0] #cloudy (20% chance)
     expected_next_state[1] = [(cur_state[0]+1)%4, 1, 0] #partially cloudy (20% chance)
@@ -68,9 +72,9 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
         # this was originally 'i' but shouldn't it be j???
         max_q_values.append(np.max(q_vals[expected_next_state_array_indices[j], :]))
 
-    expected_value_next_state = 0.2 * 0.2 * max_q_values[0] + 0.2 * 0.2 * max_q_values[1] + 0.6 * 0.2 * max_q_values[2] + \
-                                0.2 * 0.5 * max_q_values[3] + 0.2 * 0.5 * max_q_values[4] + 0.6 * 0.5 * max_q_values[5] + \
-                                0.2 * 0.3 * max_q_values[6] + 0.2 * 0.3 * max_q_values[7] + 0.6 * 0.3 * max_q_values[8]
+    expected_value_next_state = 0.2 * prob_not_windy * max_q_values[0] + 0.2 * prob_not_windy * max_q_values[1] + 0.6 * prob_not_windy * max_q_values[2] + \
+                                0.2 * prob_part_windy * max_q_values[3] + 0.2 * prob_part_windy * max_q_values[4] + 0.6 * prob_part_windy * max_q_values[5] + \
+                                0.2 * prob_windy * max_q_values[6] + 0.2 * prob_windy * max_q_values[7] + 0.6 * prob_windy * max_q_values[8]
     return expected_value_next_state
 
 
@@ -82,20 +86,21 @@ def smooth_list(x):
     return avg_x
 
 
-def print_info(itr, env):
+def print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg):
     print("*************************")
     print("Iteration : " + str(itr))
-    print("Renewable Energy:" + str(env.solar_energy))
-    print("Fossil Fuel Energy: " + str(env.grid_energy))
-    print("Renewable Energy Cost: " + str(env.solar_cost))
-    print("Fossil Fuel Cost: " + str(env.grid_cost))
-    print("Time Energy Requirement: " + str(env.time_energy_requirement[3]))
-    if (env.solar_energy + env.grid_energy) > 0:
-        print("Percentage of Renewable : " + str(
-            (float(env.solar_energy) / (env.solar_energy + env.grid_energy)) * 100))
+    print("Average Daily Energy Demand: " + str(round(np.mean(env.time_energy_requirement),2)))
+    print("Average Daily Solar Energy Produced:" + str(round(solar_avg, 2)))
+    print("Average Daily Wind Energy Produced: " + str(round(wind_avg, 2)))
+    print("Average Daily Fossil Fuel Energy Produced: " + str(round(ff_avg, 2)))
+    print("Average Daily Battery Used Produced: " + str(round(batt_used_avg, 2)))
+    print("Daily Energy Stored in Battery Produced: " + str(round(batt_storage_avg, 2)))
+    if (solar_avg + wind_avg + batt_used_avg + ff_avg) > 0:
+        print("Percentage of Renewable Energy Produced Produced: " + str(
+            round(((float(solar_avg + wind_avg + batt_used_avg) / (solar_avg + wind_avg + batt_used_avg + ff_avg)) * 100),2)))
     else:
         print("NO ENERGY PRODUCED")
-    if (env.time_energy_requirement[3] <= (env.solar_energy + env.grid_energy)):
+    if (np.mean(env.time_energy_requirement) <= (solar_avg + wind_avg + batt_used_avg + ff_avg)):
         print("Energy Requirement Met: YES")
     else:
         print(("Energy Requirement Met: NO"))

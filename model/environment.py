@@ -112,7 +112,7 @@ class EnergyEnvironment:
         # if there is excess energy to store in battery
         if (self.solar_energy + self.wind_energy + self.battery_energy) > energy_demand:
             self.battery_energy = (self.solar_energy + self.wind_energy + self.battery_energy) - energy_demand
-            if (self.battery_energy < old_battery):
+            if self.battery_energy < old_battery:
                 self.battery_used = old_battery - self.battery_energy
             else:
                 self.battery_used = 0
@@ -129,6 +129,9 @@ class EnergyEnvironment:
                                solar_energy_produced, wind_energy_produced, self.battery_used)
 
         self.get_next_state()
+
+        if(self.battery_energy > 20):
+            print("greater than 20")
 
         return self.reward, self.state
 
