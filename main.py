@@ -18,7 +18,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
-        episodes_num = 1000
+        episodes_num = 1001
 
     # House dependent parameters
     location = 'California' 
@@ -52,6 +52,11 @@ if __name__ == "__main__":
     ffSubList = []
     battstorageSubList = []
     battusedSubList = []
+
+    ## for realtime plotting
+    # fig, ax = plt.subplots()
+    # ax.set_ylabel("Energy (kWh)")
+    # ax.set_title("Evolution of Energy Use")
 
     for itr in range(episodes_num):
         if itr%print_iteration == 0:
