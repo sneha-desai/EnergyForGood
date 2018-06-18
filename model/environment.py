@@ -103,7 +103,7 @@ class EnergyEnvironment:
 
         solar_energy_called = action[self.solar_index]
         grid_energy_called = action[self.ff_index]
-        wind_energy_called = action[self.wind_index] * 0.1 * self.house.num_of_turbines     # 0 -> 0, 1 -> 0.1, 2 -> 0.2, etc
+        wind_energy_called = action[self.wind_index] * 0.1 * self.house.num_of_turbines
 
         solar_energy_produced = self.solar_producer.output(solar_energy_called, sun_coverage)
         self.solar_energy = copy.deepcopy(solar_energy_produced)
