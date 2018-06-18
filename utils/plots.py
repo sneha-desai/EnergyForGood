@@ -23,8 +23,10 @@ def multiBarPlot(x, y, colors, ylabel, title, legends):
 def plot_learning_curve(rList):
     x = list(range(len(rList)))
     y = rList
+    yerr = np.std(y)
 
-    plt.plot(x, utils.smooth_list(y))
+    # plt.plot(x, utils.smooth_list(y))
+    plt.errorbar(x, y, yerr, fmt='o', ecolor='r')
     plt.ylabel("Total Reward")
     plt.xlabel("Episodes")
     plt.grid(True)

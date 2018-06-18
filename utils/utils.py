@@ -91,7 +91,7 @@ def smooth_list(x):
 def print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg, avg_Q_change):
     print("*************************")
     print("Iteration : " + str(itr))
-    # print( "Q change: %0.2f"%avg_Q_change)
+    print( "Q change: %0.2f"%avg_Q_change)
     print("Average Daily Energy Demand: " + str(round(np.mean(env.time_energy_requirement),2)))
     print("Average Daily Solar Energy Produced:" + str(round(solar_avg, 2)))
     print("Average Daily Wind Energy Produced: " + str(round(wind_avg, 2)))
