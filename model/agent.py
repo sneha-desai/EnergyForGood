@@ -21,7 +21,8 @@ class Agent:
         self.action_map = maps.init_action_map(self.num_solar_actions, self.num_wind_actions, self.num_fossil_actions)
 
         # Learning paramenters
-        self.gamma = 0.95 
+        self.gamma = 0.95
+        # ARMAN: I think alpha is way too big
         self.alpha = 0.8
 
     def initialize_Q(self):

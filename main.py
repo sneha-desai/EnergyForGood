@@ -4,7 +4,6 @@ import sys
 # import data.resources as capacities
 import utils.utils as utils
 import utils.plots as plots 
-import utils.maps as maps
 from model.environment import EnergyEnvironment
 from model.agent import Agent
 from model.house import House
@@ -38,8 +37,10 @@ if __name__ == "__main__":
 
     # For printing and plots
     print_iteration = 50
+    # ARMAN: What is a print_flag?
     print_flag = False
 
+    # ARMAN: Needs comments
     rList = []
     solarList = []
     windList = []

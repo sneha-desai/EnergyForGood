@@ -2,7 +2,11 @@ import random
 import numpy as np
 from datetime import datetime
 
-import utils.maps as maps
+import maps
+
+prob_windy = 0.5
+prob_part_windy = 0.4
+prob_not_windy = 0.1
 
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]
@@ -46,9 +50,7 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
 #     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
 # =======
 
-    prob_windy = 0.5
-    prob_part_windy = 0.4
-    prob_not_windy = 0.1
+
 
     # not windy (20%)
     expected_next_state[0] = [(cur_state[0]+1)%4, 0, 0] #cloudy (20% chance)
