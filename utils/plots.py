@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt 
-import utils
+import utils.utils as utils
 
 def multiBarPlot(x, y, colors, ylabel, title, legends):
     N = len(x)

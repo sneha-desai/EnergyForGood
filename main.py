@@ -3,7 +3,8 @@ import sys
 
 # import data.resources as capacities
 import utils.utils as utils
-import utils.plots as plots 
+import utils.plots as plots
+# from utils import *
 from model.environment import EnergyEnvironment
 from model.agent import Agent
 from model.house import House
@@ -11,25 +12,27 @@ from model.house import House
 import matplotlib.pyplot as plt
 
 
-
-if __name__ == "__main__":
-    # Get arguments 
+def main():
+    # Get arguments
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
-        episodes_num = 1001
+        episodes_num = 1600
 
     # House dependent parameters
     location = 'California' 
     num_of_panels = 30   # Number of 250-watts solar panels
     num_of_turbines = 2  # Number of 400 KW wind turbines
     num_of_batteries = 2
-    house = House('California', num_of_panels, num_of_turbines, num_of_batteries)
+
+    house = House(location, num_of_panels, num_of_turbines, num_of_batteries)
 
     # Main dependent parameters
+    num_of_months = 12
     num_of_days = 30        # number of days per episode
     num_time_states = 4
     epsilon = 0.5
+    alpha = 0.8
 
     # Initiate Agent
     agent = Agent()
@@ -76,6 +79,8 @@ if __name__ == "__main__":
         batt_storage_avg = 0
         batt_used_avg = 0
 
+        # for month in range(num_of_months):
+        #     env.state[env.month_index] = month
 
         for day in range(num_of_days):
             total_solar_energy = 0
@@ -87,7 +92,9 @@ if __name__ == "__main__":
             for i in range(num_time_states):
                 action, cur_state_index, action_index = agent.get_action(cur_state, Q, epsilon)
                 reward, next_state = env.step(action, cur_state)
-                Q = agent.get_Q(action, cur_state, Q, epsilon, cur_state_index, action_index, reward)
+
+                Q = agent.get_Q(action, cur_state, Q, epsilon, cur_state_index, action_index, reward, alpha)
+
                 cur_state = next_state
                 total_reward += reward
 
@@ -95,10 +102,9 @@ if __name__ == "__main__":
                 total_solar_energy += env.solar_energy
                 total_wind_energy += env.wind_energy
                 total_grid_energy += env.grid_energy
-                # total_battery_stored += env.battery_energy
                 total_battery_used += env.battery_used
 
-            # save daily energy use from different sources
+            # store how much is stored in the battery at the end of each day
             total_battery_stored = env.battery_energy
 
             # save total daily energy produced from different sources
@@ -127,11 +133,11 @@ if __name__ == "__main__":
             battusedList.append(np.mean(batt_used_avg))
 
             plt.ion()
-            plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
-                                           [batt_storage_avg], [batt_used_avg]],
-                                colors=['b', 'g', 'r', 'purple', 'gray'],
-                                legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
-                                         "Battery Usage"], ax=ax)
+            # plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
+            #                                [batt_storage_avg], [batt_used_avg]],
+            #                     colors=['b', 'g', 'r', 'purple', 'gray'],
+            #                     legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
+            #                              "Battery Usage"], ax=ax)
 
             solarSubList = []
             windSubList = []
@@ -146,6 +152,7 @@ if __name__ == "__main__":
 
         #decrease exploration factor by a little bit every episode
         epsilon = max(0, epsilon-0.0005)
+        alpha = max(0, alpha-0.0005)
 
     plt.close()
     print("Score over time: " + str(sum(rList) / episodes_num))
@@ -162,3 +169,7 @@ if __name__ == "__main__":
 
     plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
+
+
+if __name__ == "__main__":
+    main()

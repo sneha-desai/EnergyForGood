@@ -8,14 +8,13 @@ from model.producer import EnergyProducer
 
 class EnergyEnvironment:
     def __init__(self, house): 
-        self.time_energy_requirement = [
-            7.0,
-            8.0,
-            6.0,
-            7.0
-        ]
+
+        self.time_energy_requirement = house.get_demand()
+
         self.house = house
+
         self.capacities = house.get_caps()
+
         # solar
         self.solar_producer = EnergyProducer('solar', self.capacities["solar"]) #array
         self.solar_cost = 0
@@ -37,7 +36,8 @@ class EnergyEnvironment:
 
         # other parameters
         self.reward = 0
-        self.state = [0,0,0] # order = time, sun, wind
+        self.state = [0,0,0]
+        # self.state = [0,0,0,0] # order = time, sun, wind
 
         self.solar_index = 0
         self.wind_index = 1
@@ -46,6 +46,7 @@ class EnergyEnvironment:
         self.time_index = 0
         self.sun_coverage_index = 1
         self.wind_power_index = 2
+        # self.month_index = 3
 
     def reset(self):
         # solar
@@ -85,8 +86,8 @@ class EnergyEnvironment:
     def step(self, action, state):
         self.reset()
 
-        # penalizes reward because of initial cost of solar panels
-        # self.reward -= self.solar_producer.get_init_price()/30
+        # initial_resource_price = self.solar_producer.get_init_price()
+        # print("initial resource price:", initial_resource_price)
         # self.solar_producer.set_init_price(0)
 
         time = state[self.time_index]
@@ -102,7 +103,7 @@ class EnergyEnvironment:
 
         solar_energy_called = action[self.solar_index]
         grid_energy_called = action[self.ff_index]
-        wind_energy_called = action[self.wind_index] * 0.1 * self.house.num_of_turbines     # 0 -> 0, 1 -> 0.1, 2 -> 0.2, etc
+        wind_energy_called = action[self.wind_index] * 0.1 * self.house.num_of_turbines
 
         solar_energy_produced = self.solar_producer.output(solar_energy_called, sun_coverage)
         self.solar_energy = copy.deepcopy(solar_energy_produced)

@@ -2,6 +2,14 @@ class EnergyProducer(object):
     def __init__(self, type, capacity):
         self.type = type
         self.capacity = capacity
+
+        self.resource_init_price = {
+            "solar": 20000, # $
+            "wind": 800,
+            "fossil fuel": 0, # $
+            "battery": 3000
+        }
+
         # self.unit_price = resource_price[type]
         # self.init_price = resource_init_price[type]
 
@@ -39,9 +47,8 @@ class EnergyProducer(object):
     # def production_cost(self, quantity):
     #     return self.unit_price * quantity
 
-    # def get_init_price(self):
-    #     return self.init_price
+    def get_init_price(self):
+        return self.resource_init_price
 
-    # def set_init_price(self, val):
-    #     self.init_price = val
-    #     return self.init_price
+    def set_init_price(self, val):
+        self.resource_init_price[self.type] = val

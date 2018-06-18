@@ -7,6 +7,7 @@ def solar_api_call(location):
     solar_response = requests.get("https://developer.nrel.gov/api/solar/solar_resource/v1.json?api_key=owCXDO0Dkwp5tddJBWWCfSEVKxR3NpSHbtxYOuGu&address={}" .format(location))
     solar_list = json.loads(solar_response.content)
     solar_obj = solar_list['outputs']['avg_lat_tilt']['monthly']
+    # print(solar_obj)
     solar_dict = []
     for value in solar_obj.values():
         solar_dict.append(value)
