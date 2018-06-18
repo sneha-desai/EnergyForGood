@@ -18,7 +18,7 @@ def eps_greedy(q_vals, eps, state, num_actions):
         action = random.randint(0,num_actions)
         return action # sample an action randomly # sample an action randomly
     else:
-        action = np.argmax(q_vals[state,:])
+        action = np.argmax(q_vals[state,:]) #potentially randomize if more than one cell has the max value
     return action
 
 # def calculate_expected_next_state(action, cur_state, state_map, q_vals):

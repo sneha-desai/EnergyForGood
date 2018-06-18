@@ -17,7 +17,7 @@ def multiBarPlot(x, y, colors, ylabel, title, legends):
     ax.set_xticklabels(x)
     ax.legend((rects[0][0], rects[1][0], rects[2][0], rects[3][0], rects[4][0]), legends)
     time = utils.get_timestamp()
-    plt.savefig('{}.png'.format(title)) # + time))
+    plt.savefig('plots/{}.png'.format(title + time))
 
 
 def plot_learning_curve(rList):
@@ -33,7 +33,7 @@ def plot_learning_curve(rList):
     plt.title("Q-Learning Curve")
 
     time = utils.get_timestamp()
-    plt.savefig('{}.png'.format("Q-Learning Curve")) # + time))
+    plt.savefig('plots/{}.png'.format("Q-Learning Curve" + time))
     plt.close()
 
 
