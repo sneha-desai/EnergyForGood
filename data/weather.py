@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from utils import prob_windy, prob_part_windy, prob_not_windy
+from utils.utils import prob_windy, prob_part_windy, prob_not_windy
 Z=0.4
 
 def get_sunlight():
