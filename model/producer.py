@@ -25,6 +25,8 @@ class EnergyProducer(object):
         # Only need an if for solar because it is the only month dependent right now
         if self.type == "solar":
             energy_produced = min(quantity, self.capacity[0]*coverage)
+        elif self.type == "wind":
+            energy_produced = min(quantity, self.capacity[0] * coverage)
         else: 
             energy_produced = min(quantity, self.capacity*coverage)
         return energy_produced
