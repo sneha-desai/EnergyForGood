@@ -3,8 +3,8 @@ import sys
 
 # import data.resources as capacities
 import utils.utils as utils
-import utils.plots as plots 
-import utils.maps as maps
+import utils.plots as plots
+# from utils import *
 from model.environment import EnergyEnvironment
 from model.agent import Agent
 from model.house import House
@@ -21,9 +21,11 @@ def main():
 
     # House dependent parameters
     location = 'California' 
-    num_of_panels = 30 # Number of 250-watts solar panels
+    num_of_panels = 30   # Number of 250-watts solar panels
+    num_of_turbines = 2  # Number of 400 KW wind turbines
     num_of_batteries = 2
-    house = House(location, num_of_panels, num_of_batteries)
+
+    house = House(location, num_of_panels, num_of_turbines, num_of_batteries)
 
     # Main dependent parameters
     num_of_months = 12
@@ -35,11 +37,14 @@ def main():
     # Initiate Agent
     agent = Agent()
     Q = agent.initialize_Q()
+    avg_Q_old = np.mean(Q)
 
     # For printing and plots
     print_iteration = 50
+    # ARMAN: What is a print_flag?
     print_flag = False
 
+    # ARMAN: Needs comments
     rList = []
     solarList = []
     windList = []
@@ -53,6 +58,11 @@ def main():
     ffSubList = []
     battstorageSubList = []
     battusedSubList = []
+
+    ## for realtime plotting
+    fig, ax = plt.subplots()
+    ax.set_ylabel("Energy (kWh)")
+    ax.set_title("Evolution of Energy Use")
 
     for itr in range(episodes_num):
         if itr%print_iteration == 0:
@@ -82,6 +92,7 @@ def main():
             for i in range(num_time_states):
                 action, cur_state_index, action_index = agent.get_action(cur_state, Q, epsilon)
                 reward, next_state = env.step(action, cur_state)
+
                 Q = agent.get_Q(action, cur_state, Q, epsilon, cur_state_index, action_index, reward, alpha)
 
                 cur_state = next_state
@@ -111,19 +122,22 @@ def main():
 
 
         if print_flag:
-            utils.print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg)
+            avg_Q_new = np.mean(Q)
+            avg_Q_change = abs(avg_Q_new-avg_Q_old)
+            utils.print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg, avg_Q_change)
+            avg_Q_old = avg_Q_new
             solarList.append(solar_avg)
             windList.append(wind_avg)
             ffList.append(ff_avg)
             battstorageList.append(batt_storage_avg)
             battusedList.append(np.mean(batt_used_avg))
 
-            # plt.ion()
+            plt.ion()
             # plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
-            #                                 [batt_storage_avg], [batt_used_avg]],
-            #                      colors=['b', 'g', 'r', 'purple', 'gray'],
-            #                      legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
-            #                               "Battery Usage"], ax=ax)
+            #                                [batt_storage_avg], [batt_used_avg]],
+            #                     colors=['b', 'g', 'r', 'purple', 'gray'],
+            #                     legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
+            #                              "Battery Usage"], ax=ax)
 
             solarSubList = []
             windSubList = []
@@ -140,7 +154,7 @@ def main():
         epsilon = max(0, epsilon-0.0005)
         alpha = max(0, alpha-0.0005)
 
-    # plt.close()
+    plt.close()
     print("Score over time: " + str(sum(rList) / episodes_num))
     print("Q-values:", Q)
 

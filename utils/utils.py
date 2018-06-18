@@ -4,6 +4,10 @@ from datetime import datetime
 
 import utils.maps as maps
 
+prob_windy = 0.5
+prob_part_windy = 0.4
+prob_not_windy = 0.1
+
 def q_learning_update(gamma, alpha, q_vals, cur_state, action, expected_value_next_state, reward):
     delta = reward + gamma * expected_value_next_state - q_vals[cur_state, action]
     q_vals[cur_state, action] = q_vals[cur_state, action] + alpha * delta
@@ -46,9 +50,7 @@ def calculate_expected_next_state(action, cur_state, state_map, q_vals):
 #     expected_value_next_state = 0.2*max_q_values[0] + 0.2*max_q_values[1] + 0.6*max_q_values[2]
 # =======
 
-    prob_windy = 0.5
-    prob_part_windy = 0.4
-    prob_not_windy = 0.1
+
 
     # not windy (20%)
     expected_next_state[0] = [(cur_state[0]+1)%4, 0, 0] #cloudy (20% chance)
@@ -86,9 +88,10 @@ def smooth_list(x):
     return avg_x
 
 
-def print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg):
+def print_info(itr, env, solar_avg, wind_avg, ff_avg, batt_storage_avg, batt_used_avg, avg_Q_change):
     print("*************************")
     print("Iteration : " + str(itr))
+    # print( "Q change: %0.2f"%avg_Q_change)
     print("Average Daily Energy Demand: " + str(round(np.mean(env.time_energy_requirement),2)))
     print("Average Daily Solar Energy Produced:" + str(round(solar_avg, 2)))
     print("Average Daily Wind Energy Produced: " + str(round(wind_avg, 2)))

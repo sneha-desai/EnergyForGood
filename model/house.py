@@ -1,18 +1,21 @@
-from data.solar_by_region_API import api_call
+from data.regional_resources import solar_api_call, wind_api_call
 
 class House: 
-    def __init__(self, location, num_of_panels, num_of_batteries):
+    def __init__(self, location, num_of_panels, num_of_turbines, num_of_batteries):
         self.num_of_panels = num_of_panels
+        self.num_of_turbines = num_of_turbines
+        self.num_of_batteries = num_of_batteries
+
         self.constant_caps = {
-            "solar": api_call(location), # Note this is an array
-            "wind": 0.5,
+            "solar": solar_api_call(location),  # Note this is an array
+            "wind": wind_api_call(location),
             "fossil fuel": 100000, 
             "battery": 10 
         }
 
         self.house_resource_capacity = {
             "solar": self.solar_multiplier(self.constant_caps["solar"]),
-            "wind": self.constant_caps["wind"],
+            "wind": self.wind_multiplier(self.constant_caps["wind"]),
             "fossil fuel": self.constant_caps["fossil fuel"],
             "battery": self.constant_caps["battery"]*num_of_batteries
         }
@@ -38,6 +41,10 @@ class House:
         # for key in d:
         #     array.append(int(d[key]*0.15*(self.num_of_panels*1.6)))
         array = [int(x * 0.15*(self.num_of_panels*1.6)) for x in array]
+        return array
+
+    def wind_multiplier(self, array):
+        array = [(self.num_of_turbines * avg_wind_speed) for avg_wind_speed in array]
         return array
 
     def get_caps(self):
