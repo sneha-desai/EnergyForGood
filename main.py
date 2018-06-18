@@ -127,11 +127,11 @@ if __name__ == "__main__":
             battusedList.append(np.mean(batt_used_avg))
 
             plt.ion()
-            plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
-                                           [batt_storage_avg], [batt_used_avg]],
-                                colors=['b', 'g', 'r', 'purple', 'gray'],
-                                legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
-                                         "Battery Usage"], ax=ax)
+            # plots.real_time_plot([[solar_avg], [wind_avg], [ff_avg],
+            #                                [batt_storage_avg], [batt_used_avg]],
+            #                     colors=['b', 'g', 'r', 'purple', 'gray'],
+            #                     legends=["Solar Energy", "Wind Energy", "Fossil Fuel Energy", "Battery Storage",
+            #                              "Battery Usage"], ax=ax)
 
             solarSubList = []
             windSubList = []
