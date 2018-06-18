@@ -17,26 +17,43 @@ class House:
             "battery": self.constant_caps["battery"]*num_of_batteries
         }
 
-        self.resource_price = {
-            "solar": 0.10, # $/kWh,
-            "wind": 0.16, # $/kWh,
-            "fossil fuel": 0.05, # $/kWh
-            "battery": 0.00 
-        }
+        # self.resource_price = {
+        #     "solar": 0.10, # $/kWh,
+        #     "wind": 0.16, # $/kWh,
+        #     "fossil fuel": 0.05, # $/kWh
+        #     "battery": 0.00
+        # }
+        #
+        # self.resource_init_price = {
+        #     "solar": 20000, # $
+        #     "wind": 800,
+        #     "fossil fuel": 0, # $
+        #     "battery": 3000
+        # }
 
-        self.resource_init_price = {
-            "solar": 20000, # $
-            "wind": 800,
-            "fossil fuel": 0, # $
-            "battery": 3000
-        }
+        self.energy_demand = [7.0, 8.0, 6.0, 7.0]
 
     def solar_multiplier(self, array):
+        # array = []
+        # for key in d:
+        #     array.append(int(d[key]*0.15*(self.num_of_panels*1.6)))
         array = [int(x * 0.15*(self.num_of_panels*1.6)) for x in array]
         return array
 
     def get_caps(self):
         return self.house_resource_capacity
+
+    # def get_resource_price(self):
+    #     return self.resource_price
+
+    # def get_init_price(self):
+    #     return self.resource_init_price
+    #
+    # def set_init_price(self):
+    #     self.resource_init_price[self.]
+
+    def get_demand(self):
+        return self.energy_demand
 
     # def get_data_monthly(self, location, panels, batteries):
     #     solar_dict = api_call(location) #solar energy from api
@@ -64,3 +81,6 @@ class House:
 #     "fossil fuel": 100000,
 #     "battery": 20 
 # }
+
+
+
