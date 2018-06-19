@@ -17,7 +17,7 @@ class House:
             "solar": self.solar_multiplier(solar_api_call(location)),  # Note this is an array
             "wind": wind_api_call(location),
             "fossil fuel": 100000, 
-            "battery": 50 
+            "battery": 10
         }
 
         self.energy_demand = [7.0, 8.0, 6.0, 7.0]

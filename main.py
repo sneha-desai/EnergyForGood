@@ -23,7 +23,7 @@ def main():
     location = 'California' 
     num_of_panels = 15   # Number of 250-watts solar panels
     num_of_turbines = 2  # Number of 400 KW wind turbines
-    num_of_batteries = 2
+    num_of_batteries = 10
 
     house = House(location, num_of_panels, num_of_turbines, num_of_batteries)
 

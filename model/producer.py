@@ -21,7 +21,7 @@ class EnergyProducer(object):
 
     def truncate(self, quantity):
         quantity = max(0, quantity)
-        return min(self.capacity, quantity)
+        return min(self.capacity*self.number, quantity)
 
     ## Functions for calculating cost
     # def production_cost(self, quantity):
