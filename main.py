@@ -21,14 +21,14 @@ def main():
 
     # House dependent parameters
     location = 'California' 
-    num_of_panels = 30   # Number of 250-watts solar panels
+    num_of_panels = 15   # Number of 250-watts solar panels
     num_of_turbines = 2  # Number of 400 KW wind turbines
     num_of_batteries = 2
 
     house = House(location, num_of_panels, num_of_turbines, num_of_batteries)
 
     # Main dependent parameters
-    num_of_months = 12
+    # num_of_months = 12
     num_of_days = 30        # number of days per episode
     num_time_states = 4
     epsilon = 0.5
