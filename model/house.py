@@ -2,11 +2,8 @@ from data.regional_resources import solar_api_call, wind_api_call
 
 class House: 
     def __init__(self, location, num_of_panels, num_of_turbines, num_of_batteries):
-        self.num_of_panels = num_of_panels
-        self.num_of_turbines = num_of_turbines
-        self.num_of_batteries = num_of_batteries
 
-        self.nums = {
+        self.num_resource = {
             "solar": num_of_panels,
             "wind": num_of_turbines,
             "fossil fuel": 1,
@@ -30,7 +27,7 @@ class House:
         return self.single_resource_capacity[resource_type]
 
     def get_nums(self, resource_type):
-        return self.nums[resource_type]
+        return self.num_resource[resource_type]
 
     def get_demand(self):
         return self.energy_demand
