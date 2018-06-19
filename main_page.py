@@ -12,7 +12,7 @@ from model.house import House
 import matplotlib.pyplot as plt
 
 
-def main_function():
+def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     # Get arguments
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
@@ -20,10 +20,10 @@ def main_function():
         episodes_num = 1600
 
     # House dependent parameters
-    location = 'California' 
-    num_of_panels = 30   # Number of 250-watts solar panels
-    num_of_turbines = 2  # Number of 400 KW wind turbines
-    num_of_batteries = 2
+    # location = 'California'
+    # num_of_panels = 30   # Number of 250-watts solar panels
+    # num_of_turbines = 2  # Number of 400 KW wind turbines
+    # num_of_batteries = 2
 
     house = House(location, num_of_panels, num_of_turbines, num_of_batteries)
 

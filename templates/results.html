@@ -1,21 +1,59 @@
 <!DOCTYPE html>
 <head>
   <!-- Plotly.js -->
+    <title>Results</title>
+    <link rel="icon" href="https://banner2.kisspng.com/20180219/gkw/kisspng-renewable-energy-free-content-clip-art-positive-energy-cliparts-5a8b3a9c56cca8.5068061815190739483555.jpg">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
 
+    <h3>Location: {{loc}}</h3>
+    <h3>Panels: {{panels}}</h3>
+    <h3>Turbines: {{turbines}}</h3>
+    <h3>Batteries: {{batteries}}</h3>
+
+
   <div id="myDiv"></div>
   <script>
-    var data = [
-    {
-        x: ['giraffes', 'orangutans', 'monkeys'],
-        y: [20, 14, 23],
+    console.log({{x_list}})
+    var trace1 = {
+        x: {{x_list}},
+        y: {{y_1}},
         type: 'bar'
-    }
-    ];
-    Plotly.newPlot('myDiv', data);
+    };
+
+     var trace2 = {
+        x: {{x_list}},
+        y: {{y_2}},
+        type: 'bar'
+    };
+
+     var trace3 =
+     {
+        x: {{x_list}},
+        y: {{y_3}},
+        type: 'bar'
+    };
+
+      var trace4 =
+     {
+        x: {{x_list}},
+        y: {{y_4}},
+        type: 'bar'
+    };
+
+
+     var trace5 =
+     {
+        x: {{x_list}},
+        y: {{y_5}},
+        type: 'bar'
+    };
+    var data = [trace1, trace2, trace3, trace4, trace5];
+    var layout = {barmode: 'group', title:'Energy Evolution Over Time',
+        xaxis:{ title: 'Iterations'}, yaxis:{title: 'Energy (kWh)'}};
+    Plotly.newPlot('myDiv', data, layout);
   </script>
 </body>
 
