@@ -59,6 +59,8 @@ def main_function():
     battstorageSubList = []
     battusedSubList = []
 
+    final_itr = {}
+
     ## for realtime plotting
     # fig, ax = plt.subplots()
     # ax.set_ylabel("Energy (kWh)")
@@ -86,7 +88,6 @@ def main_function():
             total_solar_energy = 0
             total_wind_energy = 0
             total_grid_energy = 0
-            total_battery_stored = 0
             total_battery_used = 0
 
             for i in range(num_time_states):
@@ -103,6 +104,9 @@ def main_function():
                 total_wind_energy += env.wind_energy
                 total_grid_energy += env.grid_energy
                 total_battery_used += env.battery_used
+
+                if itr == episodes_num - 1 and day == num_of_days - 1:
+                    final_itr[i] = [env.solar_energy, env.wind_energy, env.grid_energy, ]
 
             # store how much is stored in the battery at the end of each day
             total_battery_stored = env.battery_energy
