@@ -1,0 +1,38 @@
+h1, h2, body{
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+.titles{
+   background-color: darkslategrey;
+   color: white;
+   padding: 10px;
+ }
+
+.inputs{
+   font-size: 19px 
+}
+
+input[type="text"]{
+    font-size: 100px
+}
+
+a:link, a:visited {
+   background-color: darkslategrey;
+   color: white;
+   padding: 14px 25px;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+}
+
+a:hover, a:active {
+   background-color: #436060;
+}
+
+div.transbox {
+    margin: 30px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+}
