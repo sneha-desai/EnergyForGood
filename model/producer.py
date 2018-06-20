@@ -1,7 +1,8 @@
 class EnergyProducer(object):
-    def __init__(self, type, capacity):
-        self.type = type
-        self.capacity = capacity
+    def __init__(self, house, resource_type):
+        self.resource_type = resource_type
+        self.capacity = house.get_caps(resource_type)
+        self.number = house.get_nums(resource_type)
 
         self.resource_init_price = {
             "solar": 20000, # $
@@ -10,38 +11,17 @@ class EnergyProducer(object):
             "battery": 3000
         }
 
-        # self.unit_price = resource_price[type]
-        # self.init_price = resource_init_price[type]
-
-    # OLD output function
-    # def output(self, energy_required, weather):
-    #     if self.type == "solar":
-    #         energy_produced = self.capacity[0] * weather
-
-    #     elif self.type == "wind":
-    #         energy_produced = self.capacity[0] * weather
-
-    #     else:
-    #         # fossil fuels makes exactly the amount needed
-    #         energy_produced = energy_required
-
-    #     energy_produced = min(energy_required, energy_produced)
-
     # To implement months, output will need time as a parameter
-    #TODO: check if weather is getting passed like OLD output function
-    def output(self, quantity, coverage=1):
-        # Only need an if for solar because it is the only month dependent right now
-        if self.type == "solar":
-            energy_produced = min(quantity, self.capacity[0]*coverage)
-        elif self.type == "wind":
-            energy_produced = min(quantity, self.capacity[0] * coverage)
+    def output(self, quantity, prob=1):
+        if self.resource_type == "solar" or self.resource_type == "wind":
+            energy_produced = min(quantity, self.capacity[0]*prob)*self.number
         else: 
-            energy_produced = min(quantity, self.capacity*coverage)
+            energy_produced = min(quantity, self.capacity*prob)*self.number
         return energy_produced
 
     def truncate(self, quantity):
         quantity = max(0, quantity)
-        return min(self.capacity, quantity)
+        return min(self.capacity*self.number, quantity)
 
     ## Functions for calculating cost
     # def production_cost(self, quantity):
@@ -51,4 +31,4 @@ class EnergyProducer(object):
         return self.resource_init_price
 
     def set_init_price(self, val):
-        self.resource_init_price[self.type] = val
+        self.resource_init_price[self.resource_type] = val
