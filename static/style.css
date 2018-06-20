@@ -1,6 +1,15 @@
-h1, h2, body{
+h1, h2, body {
     text-align: center;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+body {
+    background-image: url(https://images.unsplash.com/photo-1451847251646-8a6c0dd1510c?ixlib=rb-0.3.5&s=a7073ff766ae97fbe288bea3005ef7e3&auto=format&fit=crop&w=2089&q=80); 
+    background-size: cover;
+    overflow: hidden;
+    font-family: sans-serif;
+    height: 86vh;
+    margin-top: 80px;
+    padding: 30px;
 }
 .titles{
    background-color: darkslategrey;
@@ -16,19 +25,6 @@ input[type="text"]{
     font-size: 100px
 }
 
-a:link, a:visited {
-   background-color: darkslategrey;
-   color: white;
-   padding: 14px 25px;
-   text-align: center;
-   text-decoration: none;
-   display: inline-block;
-}
-
-a:hover, a:active {
-   background-color: #436060;
-}
-
 div.transbox {
     margin: 30px;
     background-color: #ffffff;
@@ -37,6 +33,40 @@ div.transbox {
     filter: alpha(opacity=60); /* For IE8 and earlier */
 }
 
-#myDiv, #myDiv2 {
-    display: inline;
+/* NAVIGATION BAR */
+
+header {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 15px 0 black;
 }
+
+header * {
+    display: inline;
+    font-size: 20px;
+}
+
+header img {
+    height: 50px;
+    margin-left: 40px;
+}
+
+header h3 {
+    margin-left: 10px
+}
+
+header a {
+    color: black;
+    text-decoration: none;
+    margin: 20px;
+}
+header a:hover, a:active {
+    color: #6ad34b
+ }
+

@@ -16,6 +16,10 @@ def team():
 def about():
     return render_template("about.html")
 
+@app.route("/example")
+def caliexample():
+    return render_template("example.html")
+
 
 # @app.route("/results", methods="P")
 # def results():
