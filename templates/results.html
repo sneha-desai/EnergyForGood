@@ -1,21 +1,96 @@
 <!DOCTYPE html>
 <head>
   <!-- Plotly.js -->
+    <title>Results</title>
+    <link rel="icon" href="https://cleanchoiceenergy.com/assets/img/how-it-works-2.png">
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
-<body>
+ <style>
+    h1, h2, body{
+         text-align: center;
+         font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+         background-color: #BAD044;
+    }
+    .titles{
+        background-color: darkslategrey;
+        color: white;
+        padding: 10px;
+      }
+
+    input[type="text"]{
+        font-size: 100px
+    }
+
+    a:link, a:visited {
+        background-color: darkslategrey;
+        color: white;
+        padding: 14px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+
+    a:hover, a:active {
+        background-color: #436060;
+    }
+ </style>
+
+<body style="background">
+
+    <a href="/">Home</a>
+    <a href="about">About</a>
+    <a href="team">Meet the Team</a>
+
+    <h1 class="titles">Results</h1>
+
+    <h3>Location: {{loc}}</h3>
+    <h3>Panels: {{panels}}</h3>
+    <h3>Turbines: {{turbines}}</h3>
+    <h3>Batteries: {{batteries}}</h3>
+
 
   <div id="myDiv"></div>
   <script>
-    var data = [
-    {
-        x: ['giraffes', 'orangutans', 'monkeys'],
-        y: [20, 14, 23],
+    console.log({{x_list}})
+    var trace1 = {
+        x: {{x_list}},
+        y: {{y_1}},
         type: 'bar'
-    }
-    ];
-    Plotly.newPlot('myDiv', data);
+    };
+
+     var trace2 = {
+        x: {{x_list}},
+        y: {{y_2}},
+        type: 'bar'
+    };
+
+     var trace3 =
+     {
+        x: {{x_list}},
+        y: {{y_3}},
+        type: 'bar'
+    };
+
+      var trace4 =
+     {
+        x: {{x_list}},
+        y: {{y_4}},
+        type: 'bar'
+    };
+
+
+     var trace5 =
+     {
+        x: {{x_list}},
+        y: {{y_5}},
+        type: 'bar'
+    };
+    var data = [trace1, trace2, trace3, trace4, trace5];
+    var layout = {barmode: 'group', title:'Energy Evolution Over Time',
+        xaxis:{ title: 'Iterations'}, yaxis:{title: 'Energy (kWh)'}};
+    Plotly.newPlot('myDiv', data, layout);
   </script>
 </body>
 
