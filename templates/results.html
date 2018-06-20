@@ -49,7 +49,7 @@
      {
         x: {{x_list}},
         y: {{y_4}},
-        name: 'battery stored',
+        name: 'Battery Stored',
         type: 'bar'
     };
 
@@ -57,13 +57,59 @@
      {
         x: {{x_list}},
         y: {{y_5}},
-        name: 'battery used',
+        name: 'Battery Used',
         type: 'bar'
     };
     var data = [trace1, trace2, trace3, trace4, trace5];
     var layout = {barmode: 'group', title:'Energy Evolution Over Time',
         xaxis:{ title: 'Iterations'}, yaxis:{title: 'Energy (kWh)'}};
     Plotly.newPlot('myDiv', data, layout);
+  </script>
+
+  <div id="myDiv2"></div>
+  <script>
+    console.log({{x_list_final}})
+    var trace1 = {
+        x: {{x_list_final}},
+        y: {{y_1_final}},
+        name: 'Solar Energy',
+        type: 'bar'
+    };
+
+     var trace2 = {
+        x: {{x_list_final}},
+        y: {{y_2_final}},
+        name: 'Wind Energy',
+        type: 'bar'
+    };
+
+     var trace3 =
+     {
+        x: {{x_list_final}},
+        y: {{y_3_final}},
+        name: 'Fossil Fuel Energy',
+        type: 'bar'
+    };
+
+      var trace4 =
+     {
+        x: {{x_list_final}},
+        y: {{y_4_final}},
+        name: 'Battery Used',
+        type: 'bar'
+    };
+
+     <!--var trace5 =-->
+     <!--{-->
+        <!--x: {{x_list_final}},-->
+        <!--y: {{y_5_final}},-->
+        <!--name: 'Battery Used',-->
+        <!--type: 'bar'-->
+    <!--};-->
+    var data = [trace1, trace2, trace3, trace4];
+    var layout = {barmode: 'group', title:'Final Learned Results',
+        xaxis:{ title: 'Time of Day'}, yaxis:{title: 'Energy (kWh)'}};
+    Plotly.newPlot('myDiv2', data, layout);
   </script>
 </body>
 

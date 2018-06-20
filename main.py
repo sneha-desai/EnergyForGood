@@ -86,7 +86,6 @@ def main():
             total_solar_energy = 0
             total_wind_energy = 0
             total_grid_energy = 0
-            total_battery_stored = 0
             total_battery_used = 0
 
             for i in range(num_time_states):
@@ -165,7 +164,6 @@ def main():
     energyList.append(ffList)
     energyList.append(battstorageList)
     energyList.append(battusedList)
-
 
     plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])

@@ -15,6 +15,7 @@ class EnergyProducer(object):
     def output(self, quantity, prob=1):
         if self.resource_type == "solar" or self.resource_type == "wind":
             energy_produced = min(quantity, self.capacity[0]*prob)*self.number
+            # print("LOOK HERE!!!!!!!!!!!!!! Capacity:", self.capacity[0]*prob*self.number, "Quantity: ", quantity)
         else: 
             energy_produced = min(quantity, self.capacity*prob)*self.number
         return energy_produced

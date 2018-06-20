@@ -59,7 +59,20 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     battstorageSubList = []
     battusedSubList = []
 
-    final_itr = {}
+    final_itr = []
+    final_list = []
+
+    final_solar = []
+    solar_dict = {0: [], 1: [], 2: [], 3: []}
+
+    final_wind = []
+    wind_dict = {0: [], 1: [], 2: [], 3: []}
+
+    final_ff = []
+    ff_dict = {0: [], 1: [], 2: [], 3: []}
+
+    final_battery = []
+    battery_dict = {0: [], 1: [], 2: [], 3: []}
 
     ## for realtime plotting
     # fig, ax = plt.subplots()
@@ -105,8 +118,11 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
                 total_grid_energy += env.grid_energy
                 total_battery_used += env.battery_used
 
-                if itr == episodes_num - 1 and day == num_of_days - 1:
-                    final_itr[i] = [env.solar_energy, env.wind_energy, env.grid_energy, ]
+                if itr == (episodes_num - 1):
+                    solar_dict[i].append(env.solar_energy)
+                    wind_dict[i].append(env.wind_energy)
+                    ff_dict[i].append(env.grid_energy)
+                    battery_dict[i].append(env.battery_used)
 
             # store how much is stored in the battery at the end of each day
             total_battery_stored = env.battery_energy
@@ -164,17 +180,32 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
 
     plots.plot_learning_curve(rList)
 
+
+    for i in range(num_time_states):
+        final_solar.append(np.mean(solar_dict[i]))
+        final_wind.append(np.mean(wind_dict[i]))
+        final_ff.append(np.mean(ff_dict[i]))
+        final_battery.append(np.mean(battery_dict[i]))
+
     energyList.append(solarList)
     energyList.append(windList)
     energyList.append(ffList)
     energyList.append(battstorageList)
     energyList.append(battusedList)
 
+    final_itr.append(final_solar)
+    final_itr.append(final_wind)
+    final_itr.append(final_ff)
+    final_itr.append(final_battery)
+
+
+    plots.multiBarPlot_final(list(range(4)), final_itr, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
+                 title="Final Iteration of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
 
     plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
                  title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
 
-    return list(range(len(solarList))), energyList
+    return list(range(len(solarList))), energyList, list(range(len(final_solar))), final_itr
 
 
 # if __name__ == "__main__":
