@@ -5,6 +5,16 @@ body {
     margin-top: 80px;
 }
 
+p {
+    padding: 10px
+}
+h5 {
+    color: #373D3F
+}
+
+input:hover {
+    color: black
+}
 .background {
     background-image: url(https://images.unsplash.com/photo-1451847251646-8a6c0dd1510c?ixlib=rb-0.3.5&s=a7073ff766ae97fbe288bea3005ef7e3&auto=format&fit=crop&w=2089&q=80); 
     background-size: cover;
@@ -16,6 +26,11 @@ body {
     background-size: cover;
     height: 100vh;
     padding-bottom: 30px;
+}
+
+.background-white {
+    background-color: whitesmoke;
+    padding: 0.5em 0 2em;
 }
 
 img {
@@ -30,8 +45,8 @@ input[type="text"]{
     font-size: 100px
 }
 
-div.transbox {
-    padding: 20px;
+.transbox {
+    /* padding: 20px; */
     width: 75%;
     margin: 10px;
     background-color: rgb(255, 255, 255, 0.6);
@@ -84,4 +99,45 @@ header a:hover, a:active {
     margin: 0 auto;
     height:400px;
     width: 95%;
+}
+
+/* THREE COLUMN LAYOUT */
+
+.column {
+    float: left;
+    width: 30%;
+}
+
+.column-mid {
+    float: left;
+    width: 5%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.fa-home {
+    color: #3C8EC9
+}
+
+.fa-robot {
+    color: #71A2D6
+}
+
+.fa-chart-bar {
+    color: #184145
+}
+
+.fa-angle-right {
+    color: rgb(56, 59, 59);
+}
+
+.fa-angle-right:before {
+    padding: 1.5em 0;
+    display: inline-block;
+    vertical-align: middle;
 }

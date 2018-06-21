@@ -5,6 +5,8 @@
     <title>Energy4Good</title>
     <link rel="icon" href="https://cleanchoiceenergy.com/assets/img/how-it-works-2.png">
     <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
  </head>
  <body class="background">
     <header>
@@ -19,50 +21,74 @@
                 </ul>
             </nav>
     </header>
-    <div class="transbox">
-        <h3>Enter your home specifications:</h3>
-        <form name="submission" action= "/results" method="POST" class="inputs">
-            Location:
-            <select name="location">
-                <option value="california" selected="selected">California</option>
-                <option value="Florida">Florida</option>
-                <option value="New York">New York</option>
-                <option value="Texas">Texas</option>
-            </select>
-            <br>
-    
-            Number of 250W Solar Panels:
-            <select name="panels">
-                <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30" selected="selected">30</option>
-                <option value="35">35</option>
-                <option value="35">40</option>
-            </select>
-            <br>
-    
-            Number of 400W Wind Turbines:
-            <select name="turbines">
-                <option value="0">0</option>
-                <option value="1" selected="selected">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-            <br>
-    
-            Number of 10kWh Batteries:
-            <select name="batteries">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2" selected="selected">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-            <br>
-                <input type="submit" value="Submit">
-        </form>
+    <div class="transbox" style="padding: 1em 0 0 0">
+        <div class="row">
+            <h3>How it Works</h3>
+            <div class="column">
+                <i class="fas fa-home fa-3x"></i>
+                <h5>Build Microgrid</h5>
+            </div>
+            <div class="column-mid">
+                <i class="fas fa-angle-right"></i>
+                </div>
+            <div class="column">
+                <i class="fas fa-robot fa-3x"></i>
+                <h5>Train agent</h5>
+            </div>
+            <div class="column-mid">
+                <i class="fas fa-angle-right"></i>
+            </div>
+            <div class="column">
+                <i class="fas fa-chart-bar fa-3x"></i>
+                <h5>See results</h5>
+            </div>
+        </div>
+        <div class="background-white">
+            <h3>Try it out yourself</h3>
+            <form name="submission" action= "/results" method="POST" class="inputs">
+                Location:
+                <select name="location">
+                    <option value="california" selected="selected">California</option>
+                    <option value="Florida">Florida</option>
+                    <option value="New York">New York</option>
+                    <option value="Texas">Texas</option>
+                </select>
+                <br>
+        
+                Number of 250W Solar Panels:
+                <select name="panels">
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30" selected="selected">30</option>
+                    <option value="35">35</option>
+                    <option value="35">40</option>
+                </select>
+                <br>
+        
+                Number of 400W Wind Turbines:
+                <select name="turbines">
+                    <option value="0">0</option>
+                    <option value="1" selected="selected">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <br>
+        
+                Number of 10kWh Batteries:
+                <select name="batteries">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2" selected="selected">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <br>
+                    <input type="submit" value="Train">
+            </form>
+        </div>
+
     </div>
  </body>
 </html>
