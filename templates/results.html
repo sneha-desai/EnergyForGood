@@ -26,7 +26,10 @@
         <p>400W Wind Turbines: {{turbines}}</p>
         <p>10kWh Batteries: {{batteries}}</p>
         <div id="myDiv"></div>
+            <br><br>
         <div id="myDiv2"></div>
+            <br><br>
+        <div id="myDiv3"></div>
     </div>
   <script>
     console.log({{x_list}})
@@ -75,14 +78,14 @@
   <script>
     console.log({{x_list_final}})
     var trace1 = {
-        x: {{x_list_final}},
+        x: ["0-6h", "6-12h", "12-18h", "18-24h"],
         y: {{y_1_final}},
         name: 'Solar Energy',
         type: 'bar'
     };
 
      var trace2 = {
-        x: {{x_list_final}},
+        x: ["0-6h", "6-12h", "12-18h", "18-24h"],
         y: {{y_2_final}},
         name: 'Wind Energy',
         type: 'bar'
@@ -90,7 +93,7 @@
 
      var trace3 =
      {
-        x: {{x_list_final}},
+        x: ["0-6h", "6-12h", "12-18h", "18-24h"],
         y: {{y_3_final}},
         name: 'Fossil Fuel Energy',
         type: 'bar'
@@ -98,7 +101,7 @@
 
       var trace4 =
      {
-        x: {{x_list_final}},
+        x: ["0-6h", "6-12h", "12-18h", "18-24h"],
         y: {{y_4_final}},
         name: 'Battery Used',
         type: 'bar'
@@ -110,7 +113,6 @@
     Plotly.newPlot('myDiv2', data, layout);
   </script>
 
-  <div id="myDiv3"></div>
   <script>
     var trace1 = {
         x: {{x_list_learning_curve}},
