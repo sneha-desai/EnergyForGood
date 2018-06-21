@@ -19,6 +19,7 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     else:
         episodes_num = 2000
 
+
     # House dependent parameters
     # location = 'California'
     # num_of_panels = 30   # Number of 250-watts solar panels
