@@ -8,14 +8,13 @@ body {
 .background {
     background-image: url(https://images.unsplash.com/photo-1451847251646-8a6c0dd1510c?ixlib=rb-0.3.5&s=a7073ff766ae97fbe288bea3005ef7e3&auto=format&fit=crop&w=2089&q=80); 
     background-size: cover;
-    height: 86vh;
+    height: 90vh;
 }
 
-.background-solid {
+.background-results {
     background-image: url(https://images.unsplash.com/photo-1451847251646-8a6c0dd1510c?ixlib=rb-0.3.5&s=a7073ff766ae97fbe288bea3005ef7e3&auto=format&fit=crop&w=2089&q=80); 
     background-size: cover;
     height: 100vh;
-    /* background-color: #75a3e2; */
     padding-bottom: 30px;
 }
 
