@@ -39,13 +39,12 @@ def results():
       turbines = request.form['turbines']
       batteries = request.form['batteries']
 
-      x_list, y_list, x_list_final, y_list_final = main_function(location, int(panels), int(turbines), int(batteries))
+      x_list, y_list, x_list_final, y_list_final, x_list_learning_curve, y_list_learning_curve = main_function(location, int(panels), int(turbines), int(batteries))
 
       y_1 = y_list[0]
       y_2 = y_list[1]
       y_3 = y_list[2]
       y_4 = y_list[3]
-      y_5 = y_list[4]
 
       y_1_final = y_list_final[0]
       y_2_final = y_list_final[1]
@@ -54,10 +53,11 @@ def results():
 
       return render_template("results.html", loc=location, panels=panels, turbines=turbines, batteries=batteries,
                              x_list=json.dumps(x_list), y_1=json.dumps(y_1), y_2=json.dumps(y_2), y_3=json.dumps(y_3),
-                             y_4=json.dumps(y_4),y_5=json.dumps(y_5),
+                             y_4=json.dumps(y_4),
                              x_list_final = json.dumps(x_list_final), y_1_final = json.dumps(y_1_final),
                              y_2_final = json.dumps(y_2_final), y_3_final = json.dumps(y_3_final),
-                             y_4_final = json.dumps(y_4_final))
+                             y_4_final = json.dumps(y_4_final),
+                             x_list_learning_curve=x_list_learning_curve, y_list_learning_curve=y_list_learning_curve)
    else:
       location = request.args.get('location')
       return render_template("results.html", loc=location)

@@ -17,7 +17,8 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
-        episodes_num = 1500
+        episodes_num = 2000
+
 
     # House dependent parameters
     # location = 'California'
@@ -190,7 +191,7 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     energyList.append(solarList)
     energyList.append(windList)
     energyList.append(ffList)
-    energyList.append(battstorageList)
+    # energyList.append(battstorageList)
     energyList.append(battusedList)
 
     final_itr.append(final_solar)
@@ -199,14 +200,43 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     final_itr.append(final_battery)
 
 
-    plots.multiBarPlot_final(list(range(4)), final_itr, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
-                 title="Final Iteration of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
+    # plots.multiBarPlot_final(list(range(4)), final_itr, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
+    #              title="Final Iteration of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
+    #
+    # plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
+    #              title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
 
-    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
-
-    return list(range(len(solarList))), energyList, list(range(len(final_solar))), final_itr
+    return list(range(len(solarList))), energyList, list(range(len(final_solar))), final_itr, list(range(len(rList))), rList
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+     x_list, y_list, x_list_final, y_list_final, x_list_learning_curve, y_list_learning_curve = main_function('California', 25, 3, 2)
+
+     y_1 = y_list[0]
+     y_2 = y_list[1]
+     y_3 = y_list[2]
+     y_4 = y_list[3]
+
+     y_1_final = y_list_final[0]
+     y_2_final = y_list_final[1]
+     y_3_final = y_list_final[2]
+     y_4_final = y_list_final[3]
+
+     # print(x_list)
+     # print()
+     # print(y_1)
+     # print(y_2)
+     # print(y_3)
+     # print(y_4)
+     # print()
+     # print(y_1_final)
+     # print(y_2_final)
+     # print(y_3_final)
+     # print(y_4_final)
+     # print()
+     # print(x_list_learning_curve)
+     # print(y_list_learning_curve)
+
+     # print(x_list_final)
+
+
