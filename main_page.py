@@ -17,7 +17,7 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
-        episodes_num = 1600
+        episodes_num = 100
 
     # House dependent parameters
     # location = 'California'
