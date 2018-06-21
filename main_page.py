@@ -17,7 +17,7 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     if len(sys.argv) > 1:
         episodes_num = int(sys.argv[1])
     else:
-        episodes_num = 100
+        episodes_num = 2000
 
     # House dependent parameters
     # location = 'California'
@@ -190,7 +190,7 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     energyList.append(solarList)
     energyList.append(windList)
     energyList.append(ffList)
-    energyList.append(battstorageList)
+    # energyList.append(battstorageList)
     energyList.append(battusedList)
 
     final_itr.append(final_solar)
@@ -199,13 +199,13 @@ def main_function(location, num_of_panels, num_of_turbines, num_of_batteries):
     final_itr.append(final_battery)
 
 
-    plots.multiBarPlot_final(list(range(4)), final_itr, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
-                 title="Final Iteration of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
+    # plots.multiBarPlot_final(list(range(4)), final_itr, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
+    #              title="Final Iteration of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
+    #
+    # plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
+    #              title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
 
-    plots.multiBarPlot(list(range(len(solarList))), energyList, colors=['b', 'g', 'r', 'purple', 'gray'], ylabel="Energy (kWh)",
-                 title="Evolution of Energy Use", legends=["Solar Energy",  "Wind Energy", "Fossil Fuel Energy", "Battery Storage", "Battery Usage"])
-
-    return list(range(len(solarList))), energyList, list(range(len(final_solar))), final_itr
+    return list(range(len(solarList))), energyList, list(range(len(final_solar))), final_itr, list(range(len(rList))), rList
 
 
 # if __name__ == "__main__":

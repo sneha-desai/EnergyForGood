@@ -8,19 +8,32 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
-<body style="background">
-    <a href="/">Home</a>
-    <a href="about">About</a>
-    <a href="team">Meet the Team</a>
+<body class="background-results">
+    <header>
+            <img src="https://cleanchoiceenergy.com/assets/img/how-it-works-2.png">
+            <h3>Energy4Good</h3>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="about">About</a></li>
+                        <li><a href="team">Meet the Team</a></li>
+                        <li><a href="example">Sample</a></li>
+                    </ul>
+                </nav>
+        </header>
 
-    <h1 class="titles">Sample Results</h1>
+    <div class="transbox">
+        <h3 class="titles">Sample Results</h1>
+        <p>Location: California</p>
+        <p>Panels: 20</p>
+        <p>Turbines: 3</p>
+        <p>Batteries: 2</p>
+        <div id="myDiv"></div>
 
-    <h3>Location: California</h3>
-    <h3>Panels: 20</h3>
-    <h3>Turbines: 3</h3>
-    <h3>Batteries: 2</h3>
+    </div>
 
-  <div id="myDiv"></div>
+
+
   <script>
     var trace1 = {
         x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],

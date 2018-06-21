@@ -6,7 +6,7 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
-<body style="background">
+<body style="background-results">
     <header>
             <img src="https://cleanchoiceenergy.com/assets/img/how-it-works-2.png">
             <h3>Energy4Good</h3>
@@ -15,6 +15,7 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="about">About</a></li>
                         <li><a href="team">Meet the Team</a></li>
+                        <li><a href="example">Sample</a></li>
                     </ul>
                 </nav>
         </header>
@@ -56,18 +57,18 @@
      {
         x: {{x_list}},
         y: {{y_4}},
-        name: 'Battery Stored',
-        type: 'bar'
-    };
-
-     var trace5 =
-     {
-        x: {{x_list}},
-        y: {{y_5}},
         name: 'Battery Used',
         type: 'bar'
     };
-    var data = [trace1, trace2, trace3, trace4, trace5];
+
+     <!--var trace5 =-->
+     <!--{-->
+        <!--x: {{x_list}},-->
+        <!--y: {{y_5}},-->
+        <!--name: 'Battery Used',-->
+        <!--type: 'bar'-->
+    <!--};-->
+    var data = [trace1, trace2, trace3, trace4];
     var layout = {barmode: 'group', title:'Energy Evolution Over Time',
         xaxis:{ title: 'Iterations'}, yaxis:{title: 'Energy (kWh)'}};
     Plotly.newPlot('myDiv', data, layout);
@@ -106,17 +107,25 @@
         type: 'bar'
     };
 
-     <!--var trace5 =-->
-     <!--{-->
-        <!--x: {{x_list_final}},-->
-        <!--y: {{y_5_final}},-->
-        <!--name: 'Battery Used',-->
-        <!--type: 'bar'-->
-    <!--};-->
     var data = [trace1, trace2, trace3, trace4];
     var layout = {barmode: 'group', title:'Final Learned Results',
         xaxis:{ title: 'Time of Day'}, yaxis:{title: 'Energy (kWh)'}};
     Plotly.newPlot('myDiv2', data, layout);
+  </script>
+
+  <div id="myDiv3"></div>
+  <script>
+    var trace1 = {
+        x: {{x_list_learning_curve}},
+        y: {{y_list_learning_curve}},
+        name: '',
+        type: 'scatter'
+    };
+
+    var data = [trace1];
+    var layout = {title:'Learning Curve',
+        xaxis:{ title: 'Episodes'}, yaxis:{title: 'Total Reward'}};
+    Plotly.newPlot('myDiv3', data, layout);
   </script>
 </body>
 
