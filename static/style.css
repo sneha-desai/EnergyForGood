@@ -1,21 +1,27 @@
-h1, h2, body {
+body {
     text-align: center;
+    font-family: sans-serif;
+    /* padding: 30px; */
+    margin-top: 80px;
 }
 
-body {
+.background {
     background-image: url(https://images.unsplash.com/photo-1451847251646-8a6c0dd1510c?ixlib=rb-0.3.5&s=a7073ff766ae97fbe288bea3005ef7e3&auto=format&fit=crop&w=2089&q=80); 
     background-size: cover;
-    overflow: hidden;
-    font-family: sans-serif;
     height: 86vh;
-    margin-top: 80px;
-    padding: 30px;
 }
-.titles{
-   background-color: darkslategrey;
-   color: white;
-   padding: 10px;
- }
+
+.background-solid {
+    background-image: url(https://images.unsplash.com/photo-1451847251646-8a6c0dd1510c?ixlib=rb-0.3.5&s=a7073ff766ae97fbe288bea3005ef7e3&auto=format&fit=crop&w=2089&q=80); 
+    background-size: cover;
+    height: 100vh;
+    /* background-color: #75a3e2; */
+    padding-bottom: 30px;
+}
+
+img {
+    height: 300px;
+}
 
 .inputs{
    font-size: 19px 
@@ -26,11 +32,16 @@ input[type="text"]{
 }
 
 div.transbox {
-    margin: 30px;
-    background-color: #ffffff;
-    border: 1px solid black;
-    opacity: 0.6;
-    filter: alpha(opacity=60); /* For IE8 and earlier */
+    padding: 20px;
+    width: 75%;
+    margin: 10px;
+    background-color: rgb(255, 255, 255, 0.6);
+    /* border: 1px solid black; */
+    display: inline-block;
+    /* opacity: 0.6; */
+    /* filter: alpha(opacity=60); For IE8 and earlier */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
 }
 
 /* NAVIGATION BAR */
@@ -41,7 +52,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 60px;
     display: flex;
     align-items: center;
     box-shadow: 0 0 15px 0 black;
@@ -49,11 +60,11 @@ header {
 
 header * {
     display: inline;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 header img {
-    height: 50px;
+    height: 30px;
     margin-left: 40px;
 }
 
@@ -69,3 +80,10 @@ header a {
 header a:hover, a:active {
     color: #6ad34b
  }
+
+#myDiv {
+    margin: 0 auto;
+
+    height:400px;
+    width: 95%;
+}

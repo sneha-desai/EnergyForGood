@@ -6,7 +6,7 @@
     <link rel="icon" href="https://cleanchoiceenergy.com/assets/img/how-it-works-2.png">
     <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='style.css') }}">
  </head>
- <body>
+ <body class="background">
     <header>
         <img src="https://cleanchoiceenergy.com/assets/img/how-it-works-2.png">
         <h3>Energy4Good</h3>
@@ -15,13 +15,12 @@
                     <li><a href="/">Home</a></li>
                     <li><a href="about">About</a></li>
                     <li><a href="team">Meet the Team</a></li>
+                    <li><a href="example">Sample</a></li>
                 </ul>
             </nav>
     </header>
-    <div>
-        <h2>Enter your home specifications: </h2>
-    </div>
-    <div>
+    <div class="transbox">
+        <h2>Enter your home specifications:</h2>
         <form name="submission" action= "/results" method="POST" class="inputs">
             Location:
             <select name="location">
