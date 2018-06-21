@@ -73,7 +73,9 @@ class EnergyEnvironment:
         negative_reward = abs(solar_energy_called - solar_energy_produced) + \
                           abs(grid_energy_called - grid_energy_produced) + \
                           abs(wind_energy_called - wind_energy_produced) + \
+                          abs(grid_energy_called) + \
                           abs(energy_demand - output)
+
         positive_reward = abs(solar_energy_produced) + abs(wind_energy_produced) + abs(battery_used)
 
         self.reward = positive_reward - negative_reward

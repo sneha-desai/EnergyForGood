@@ -13,14 +13,14 @@ class House:
         self.single_resource_capacity = {
             "solar": self.solar_multiplier(solar_api_call(location)),  # Note this is an array
             "wind": wind_api_call(location),
-            "fossil fuel": 100000, 
+            "fossil fuel": 100000,
             "battery": 10
         }
 
-        self.energy_demand = [7.0, 8.0, 6.0, 7.0]
+        self.energy_demand = [6.12, 7.68, 7.90, 8.29]
 
     def solar_multiplier(self, array):
-        array = [float(x * 0.15 * 1.6) for x in array]
+        array = [float(x * 0.15 * 1.6 / 2.0) for x in array]
         return array
 
     def get_caps(self, resource_type):
